@@ -20,13 +20,15 @@ user-scalable=no">
   -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
   margin:0;
+  padding:0;
   width:100%;
   height:100%;
-  overflow:hidden;
-  background:#111827;
+  background:#111;
   font-family:Arial,sans-serif;
+  overflow:hidden;
 }
 
 body{
@@ -37,190 +39,351 @@ body{
 
 .game{
   position:relative;
+
   width:min(94vw,420px);
   height:min(94vh,760px);
-  aspect-ratio:420/760;
+
+  aspect-ratio:420 / 760;
+
+  background:#217a32;
+
   overflow:hidden;
+
   border-radius:18px;
-  background:#222;
-  box-shadow:0 10px 35px rgba(0,0,0,.5);
+
+  box-shadow:
+    0 0 25px rgba(0,0,0,.7);
 }
 
 canvas{
+  position:absolute;
+
+  left:0;
+  top:0;
+
   width:100%;
   height:100%;
+
   display:block;
+
   touch-action:none;
 }
 
+
+/* =========================
+   HUD
+========================= */
+
 .hud{
   position:absolute;
+
   top:10px;
-  left:8px;
-  right:8px;
+  left:10px;
+  right:10px;
+
   display:flex;
+
   justify-content:space-between;
+
   gap:5px;
-  z-index:5;
+
+  z-index:10;
+
   pointer-events:none;
 }
 
 .hudBox{
-  flex:1;
-  min-width:0;
-  padding:6px 3px;
-  border-radius:9px;
-  background:rgba(0,0,0,.58);
+  min-width:65px;
+
+  padding:5px 7px;
+
+  background:rgba(0,0,0,.72);
+
   color:white;
+
+  border-radius:8px;
+
   text-align:center;
-  font-size:10px;
+
+  font-size:11px;
+
   font-weight:bold;
+
+  border:1px solid rgba(255,255,255,.25);
 }
 
-.hudValue{
+.hudBox span{
   display:block;
+
   margin-top:2px;
-  font-size:14px;
+
+  font-size:15px;
 }
 
-.controls{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:15px;
-  display:flex;
-  justify-content:center;
-  gap:25px;
-  z-index:10;
+
+/* =========================
+   FUEL BAR
+========================= */
+
+.fuelBox{
+  min-width:100px;
 }
 
-.arrow{
-  width:65px;
-  height:52px;
-  border:0;
-  border-radius:14px;
-  background:rgba(0,0,0,.6);
-  color:white;
-  font-size:27px;
-  font-weight:bold;
-  touch-action:manipulation;
+.fuelBar{
+  width:80px;
+  height:11px;
+
+  margin:4px auto 2px;
+
+  background:#333;
+
+  border:1px solid #aaa;
+
+  border-radius:8px;
+
+  overflow:hidden;
 }
 
-.arrow:active{
-  transform:scale(.92);
-  background:#2563eb;
+#fuelFill{
+  width:100%;
+  height:100%;
+
+  background:#35d04f;
+
+  border-radius:7px;
+
+  transition:
+    width .2s linear,
+    background .2s linear;
 }
+
+#fuel{
+  font-size:12px;
+}
+
+
+/* =========================
+   OVERLAY
+========================= */
 
 .overlay{
   position:absolute;
-  inset:0;
-  z-index:20;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:18px;
-  background:rgba(0,0,0,.72);
-}
 
-.overlay.hidden{
-  display:none;
+  inset:0;
+
+  z-index:20;
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  background:rgba(0,0,0,.58);
+
+  padding:20px;
 }
 
 .panel{
-  width:min(94%,350px);
-  padding:22px 18px;
-  border-radius:20px;
-  background:#111827;
+  width:90%;
+
+  max-width:330px;
+
+  padding:25px 18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #252525,
+      #111
+    );
+
   color:white;
+
   text-align:center;
+
+  border-radius:18px;
+
+  border:1px solid
+    rgba(255,255,255,.25);
+
+  box-shadow:
+    0 10px 30px
+    rgba(0,0,0,.5);
 }
 
 .panel h1{
   margin:0 0 8px;
-  font-size:29px;
+
+  font-size:32px;
 }
 
 .panel p{
-  margin:8px 0;
-  color:#d1d5db;
-  font-size:14px;
-  line-height:1.4;
+  margin:8px 0 15px;
+
+  line-height:1.5;
+
+  color:#ddd;
 }
 
-.mainBtn{
+
+/* =========================
+   MAIN BUTTON
+========================= */
+
+#mainBtn{
   width:100%;
-  margin-top:14px;
+
   padding:13px;
+
   border:0;
-  border-radius:12px;
-  background:#22c55e;
+
+  border-radius:10px;
+
+  background:#00bfff;
+
   color:white;
-  font-size:17px;
+
+  font-size:18px;
+
   font-weight:bold;
+
   cursor:pointer;
+
   touch-action:manipulation;
 }
 
-.mainBtn:active{
+#mainBtn:active{
   transform:scale(.97);
 }
 
+
+/* =========================
+   CONTROL MODE
+========================= */
+
 .options{
   display:flex;
+
   gap:8px;
+
   margin-top:12px;
 }
 
-.optionBtn{
+.options button{
   flex:1;
-  padding:10px 5px;
-  border:1px solid #475569;
-  border-radius:10px;
-  background:#263244;
+
+  padding:9px 5px;
+
+  border:1px solid #555;
+
+  border-radius:8px;
+
+  background:#333;
+
   color:white;
-  font-size:12px;
-  font-weight:bold;
+
+  font-size:13px;
+
   cursor:pointer;
+
   touch-action:manipulation;
 }
 
-.optionBtn.active{
-  background:#2563eb;
-  border-color:#60a5fa;
+.options button.active{
+  background:#00a8df;
+
+  border-color:#5ddcff;
 }
 
 .help{
   margin-top:12px;
-  color:#cbd5e1;
+
   font-size:12px;
-  line-height:1.5;
+
+  color:#bbb;
 }
 
-.status{
-  min-height:18px;
-  margin-top:8px;
-  color:#93c5fd;
-  font-size:12px;
+
+/* =========================
+   MOBILE CONTROLS
+========================= */
+
+.controls{
+  position:absolute;
+
+  left:0;
+  right:0;
+  bottom:15px;
+
+  z-index:15;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  padding:0 18px;
+
+  pointer-events:none;
 }
 
-@media(max-height:600px){
+.arrow{
+  width:68px;
+  height:58px;
 
-  .game{
-    width:min(92vw,330px);
-    height:min(94vh,600px);
-  }
+  border:0;
 
-  .panel{
-    padding:16px;
-  }
+  border-radius:15px;
 
-  .panel h1{
-    font-size:24px;
+  background:
+    rgba(0,0,0,.62);
+
+  color:white;
+
+  font-size:30px;
+
+  font-weight:bold;
+
+  pointer-events:auto;
+
+  touch-action:manipulation;
+
+  user-select:none;
+
+  -webkit-user-select:none;
+}
+
+.arrow:active{
+  transform:scale(.92);
+
+  background:
+    rgba(0,0,0,.85);
+}
+
+
+/* =========================
+   SMALL SCREENS
+========================= */
+
+@media(max-height:650px){
+
+  .controls{
+    bottom:8px;
   }
 
   .arrow{
-    width:55px;
-    height:44px;
+    width:58px;
+    height:48px;
+
+    font-size:25px;
+  }
+
+  .panel{
+    padding:18px;
+  }
+
+  .panel h1{
+    font-size:27px;
   }
 }
 
@@ -234,6 +397,7 @@ canvas{
 
 <div class="game" id="gameBox">
 
+
   <canvas
     id="gameCanvas"
     width="420"
@@ -241,46 +405,103 @@ canvas{
   </canvas>
 
 
+  <!-- =====================
+       HUD
+  ====================== -->
+
   <div class="hud">
 
     <div class="hudBox">
       SCORE
-      <span
-        class="hudValue"
-        id="score">
-        0
-      </span>
+      <span id="score">0</span>
     </div>
+
 
     <div class="hudBox">
       COINS
-      <span
-        class="hudValue"
-        id="coins">
-        0
-      </span>
+      <span id="coins">0</span>
     </div>
+
 
     <div class="hudBox">
       LIVES
-      <span
-        class="hudValue"
-        id="lives">
-        ❤️❤️❤️
-      </span>
+      <span id="lives">❤️ 3</span>
     </div>
 
-    <div class="hudBox">
+
+    <div class="hudBox fuelBox">
+
       FUEL
-      <span
-        class="hudValue"
-        id="fuel">
-        100
-      </span>
+
+      <div class="fuelBar">
+        <div id="fuelFill"></div>
+      </div>
+
+      <span id="fuel">100%</span>
+
     </div>
 
   </div>
 
+
+  <!-- =====================
+       START / PAUSE PANEL
+  ====================== -->
+
+  <div
+    class="overlay"
+    id="overlay">
+
+    <div class="panel">
+
+      <h1 id="title">
+        ROAD RUSH
+      </h1>
+
+      <p id="message">
+        Avoid traffic, collect coins
+        and fuel packs!
+      </p>
+
+
+      <button id="mainBtn">
+        Start Game
+      </button>
+
+
+      <div class="options">
+
+        <button
+          id="buttonMode"
+          class="active">
+          🎮 Buttons
+        </button>
+
+        <button
+          id="tiltMode">
+          📱 Tilt
+        </button>
+
+      </div>
+
+
+      <div
+        class="help"
+        id="help">
+
+        Buttons: use ◀ and ▶<br>
+        Tap center of game to pause
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================
+       MOBILE BUTTONS
+  ====================== -->
 
   <div class="controls">
 
@@ -299,68 +520,11 @@ canvas{
   </div>
 
 
-  <div
-    class="overlay"
-    id="overlay">
-
-    <div class="panel">
-
-      <h1 id="title">
-        Road Rush
-      </h1>
-
-      <p id="message">
-        Avoid traffic, collect coins
-        and keep your fuel.
-      </p>
-
-
-      <div
-        class="options"
-        id="options">
-
-        <button
-          class="optionBtn active"
-          id="buttonMode">
-          🎮 Buttons
-        </button>
-
-        <button
-          class="optionBtn"
-          id="tiltMode">
-          📱 Tilt
-        </button>
-
-      </div>
-
-
-      <button
-        class="mainBtn"
-        id="mainBtn">
-        Start Game
-      </button>
-
-
-      <div
-        class="help"
-        id="help">
-        ◀ ▶ Use buttons or Arrow Keys
-      </div>
-
-
-      <div
-        class="status"
-        id="status">
-      </div>
-
-    </div>
-
-  </div>
-
 </div>
 
 
 <script>
+
 
 /* =========================
    CANVAS
@@ -376,83 +540,105 @@ const ctx =
 
 
 /* =========================
-   HTML ELEMENTS
+   HUD ELEMENTS
 ========================= */
 
 const scoreEl =
-  document.getElementById("score");
+  document.getElementById(
+    "score"
+  );
 
 const coinsEl =
-  document.getElementById("coins");
+  document.getElementById(
+    "coins"
+  );
 
 const livesEl =
-  document.getElementById("lives");
+  document.getElementById(
+    "lives"
+  );
 
 const fuelEl =
-  document.getElementById("fuel");
+  document.getElementById(
+    "fuel"
+  );
 
-const overlay =
-  document.getElementById("overlay");
-
-const titleEl =
-  document.getElementById("title");
-
-const messageEl =
-  document.getElementById("message");
-
-const mainBtn =
-  document.getElementById("mainBtn");
-
-const buttonMode =
-  document.getElementById("buttonMode");
-
-const tiltMode =
-  document.getElementById("tiltMode");
-
-const helpEl =
-  document.getElementById("help");
-
-const statusEl =
-  document.getElementById("status");
-
-const leftBtn =
-  document.getElementById("leftBtn");
-
-const rightBtn =
-  document.getElementById("rightBtn");
+const fuelFill =
+  document.getElementById(
+    "fuelFill"
+  );
 
 
 /* =========================
-   AUDIO
+   OVERLAY ELEMENTS
 ========================= */
 
-let audioCtx=null;
+const overlay =
+  document.getElementById(
+    "overlay"
+  );
+
+const title =
+  document.getElementById(
+    "title"
+  );
+
+const message =
+  document.getElementById(
+    "message"
+  );
+
+const mainBtn =
+  document.getElementById(
+    "mainBtn"
+  );
+
+const buttonMode =
+  document.getElementById(
+    "buttonMode"
+  );
+
+const tiltMode =
+  document.getElementById(
+    "tiltMode"
+  );
+
+const help =
+  document.getElementById(
+    "help"
+  );
+
+
+/* =========================
+   SOUND
+   Web Audio API
+========================= */
+
+let audioContext = null;
 
 
 function initAudio(){
 
-  if(!audioCtx){
+  if(!audioContext){
 
-    try{
+    const AudioCtx =
+      window.AudioContext ||
+      window.webkitAudioContext;
 
-      audioCtx =
-        new (
-          window.AudioContext ||
-          window.webkitAudioContext
-        )();
+    if(AudioCtx){
 
-    }catch(error){
+      audioContext =
+        new AudioCtx();
 
-      audioCtx=null;
     }
   }
 
   if(
-    audioCtx &&
-    audioCtx.state==="suspended"
+    audioContext &&
+    audioContext.state === "suspended"
   ){
 
-    audioCtx.resume();
+    audioContext.resume();
   }
 }
 
@@ -461,70 +647,76 @@ function beep(
   frequency,
   duration,
   type="sine",
-  volume=.05,
-  endFrequency=null
+  volume=.06
 ){
 
-  if(!audioCtx){
+  if(!audioContext){
     return;
   }
 
-  const oscillator =
-    audioCtx.createOscillator();
+  try{
 
-  const gain =
-    audioCtx.createGain();
+    const oscillator =
+      audioContext.createOscillator();
 
-  oscillator.type=type;
+    const gain =
+      audioContext.createGain();
 
-  oscillator.frequency.setValueAtTime(
-    frequency,
-    audioCtx.currentTime
-  );
+    oscillator.type = type;
 
-  if(endFrequency){
+    oscillator.frequency.value =
+      frequency;
 
-    oscillator.frequency.linearRampToValueAtTime(
-      endFrequency,
-      audioCtx.currentTime+
+    gain.gain.setValueAtTime(
+      volume,
+      audioContext.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      audioContext.currentTime +
       duration
     );
+
+    oscillator.connect(gain);
+
+    gain.connect(
+      audioContext.destination
+    );
+
+    oscillator.start();
+
+    oscillator.stop(
+      audioContext.currentTime +
+      duration
+    );
+
+  }catch(error){
+
+    /* Sound failure should
+       never stop the game. */
+
   }
-
-  gain.gain.setValueAtTime(
-    volume,
-    audioCtx.currentTime
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    .001,
-    audioCtx.currentTime+
-    duration
-  );
-
-  oscillator.connect(gain);
-
-  gain.connect(
-    audioCtx.destination
-  );
-
-  oscillator.start();
-
-  oscillator.stop(
-    audioCtx.currentTime+
-    duration
-  );
 }
 
 
 function coinSound(){
 
   beep(
-    900,
+    880,
     .08,
     "square",
-    .04,
-    1300
+    .05
+  );
+
+  setTimeout(
+    () => beep(
+      1200,
+      .08,
+      "square",
+      .04
+    ),
+    60
   );
 }
 
@@ -532,11 +724,20 @@ function coinSound(){
 function fuelSound(){
 
   beep(
-    450,
+    500,
     .12,
     "sine",
-    .05,
-    700
+    .06
+  );
+
+  setTimeout(
+    () => beep(
+      750,
+      .12,
+      "sine",
+      .05
+    ),
+    80
   );
 }
 
@@ -544,11 +745,10 @@ function fuelSound(){
 function slowSound(){
 
   beep(
-    300,
-    .18,
-    "sawtooth",
-    .04,
-    150
+    250,
+    .25,
+    "triangle",
+    .06
   );
 }
 
@@ -557,10 +757,9 @@ function crashSound(){
 
   beep(
     90,
-    .25,
+    .3,
     "sawtooth",
-    .08,
-    40
+    .08
   );
 }
 
@@ -568,11 +767,10 @@ function crashSound(){
 function pauseSound(){
 
   beep(
-    500,
+    350,
     .08,
-    "square",
-    .04,
-    350
+    "sine",
+    .04
   );
 }
 
@@ -580,11 +778,10 @@ function pauseSound(){
 function resumeSound(){
 
   beep(
-    350,
+    600,
     .08,
-    "square",
-    .04,
-    550
+    "sine",
+    .04
   );
 }
 
@@ -593,35 +790,44 @@ function resumeSound(){
    ROAD
 ========================= */
 
-const road={
+const road = {
 
   x:35,
 
   width:350,
 
-  offset:0,
+  lanes:3,
 
-  lanes:[]
+  lanesX:[],
+
+  offset:0
 };
 
 
 function buildRoad(){
 
-  const laneWidth=
-    road.width/3;
+  road.lanes = 3;
 
-  road.lanes=[
+  road.lanesX = [];
 
-    road.x+
-    laneWidth*.5,
+  const laneWidth =
+    road.width /
+    road.lanes;
 
-    road.x+
-    laneWidth*1.5,
+  for(
+    let i = 0;
+    i < road.lanes;
+    i++
+  ){
 
-    road.x+
-    laneWidth*2.5
+    road.lanesX.push(
 
-  ];
+      road.x +
+      laneWidth * i +
+      laneWidth / 2
+
+    );
+  }
 }
 
 
@@ -629,7 +835,7 @@ function buildRoad(){
    PLAYER
 ========================= */
 
-const player={
+const player = {
 
   lane:1,
 
@@ -644,10 +850,47 @@ const player={
 
 
 /* =========================
+   TRAFFIC TYPES
+========================= */
+
+const trafficTypes = [
+
+  {
+    name:"car",
+    w:46,
+    h:78,
+    speed:180
+  },
+
+  {
+    name:"taxi",
+    w:46,
+    h:78,
+    speed:165
+  },
+
+  {
+    name:"truck",
+    w:52,
+    h:92,
+    speed:145
+  },
+
+  {
+    name:"bus",
+    w:58,
+    h:110,
+    speed:125
+  }
+
+];
+
+
+/* =========================
    GAME STATE
 ========================= */
 
-const state={
+const state = {
 
   running:false,
 
@@ -686,45 +929,28 @@ const state={
   nearMissTimer:0,
 
   tiltCooldown:0
-
 };
 
 
 /* =========================
-   TRAFFIC TYPES
+   HIGH SCORE
 ========================= */
 
-const trafficTypes=[
+let highScore = 0;
 
-  {
-    type:"car",
-    color:"#ef4444",
-    width:46,
-    height:76
-  },
+try{
 
-  {
-    type:"taxi",
-    color:"#facc15",
-    width:46,
-    height:76
-  },
+  highScore =
+    Number(
+      localStorage.getItem(
+        "roadRushHighScore"
+      )
+    ) || 0;
 
-  {
-    type:"truck",
-    color:"#3b82f6",
-    width:52,
-    height:92
-  },
+}catch(error){
 
-  {
-    type:"bus",
-    color:"#a855f7",
-    width:55,
-    height:105
-  }
-
-];
+  highScore = 0;
+}
 
 
 /* =========================
@@ -733,71 +959,150 @@ const trafficTypes=[
 
 function updateHUD(){
 
-  scoreEl.textContent=
+  /* Prevent NaN */
+
+  if(!Number.isFinite(
+    state.score
+  )){
+
+    state.score = 0;
+  }
+
+
+  if(!Number.isFinite(
+    state.coins
+  )){
+
+    state.coins = 0;
+  }
+
+
+  if(!Number.isFinite(
+    state.fuel
+  )){
+
+    state.fuel = 100;
+  }
+
+
+  scoreEl.textContent =
     Math.floor(
       state.score
     );
 
-  coinsEl.textContent=
+
+  coinsEl.textContent =
     state.coins;
 
-  livesEl.textContent=
-    "❤️".repeat(
-      Math.max(
-        0,
-        state.lives
+
+  livesEl.textContent =
+    "❤️ " +
+    state.lives;
+
+
+  /* =====================
+     FUEL BAR
+  ====================== */
+
+  const fuelPercent =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        state.fuel
       )
     );
 
-  fuelEl.textContent=
+
+  fuelEl.textContent =
     Math.floor(
-      state.fuel
-    );
+      fuelPercent
+    ) + "%";
+
+
+  fuelFill.style.width =
+    fuelPercent + "%";
+
+
+  /* Green */
+
+  if(fuelPercent > 50){
+
+    fuelFill.style.background =
+      "#35d04f";
+  }
+
+  /* Yellow */
+
+  else if(fuelPercent > 25){
+
+    fuelFill.style.background =
+      "#ffd21f";
+  }
+
+  /* Red */
+
+  else{
+
+    fuelFill.style.background =
+      "#ff3333";
+  }
 }
 
 
 /* =========================
-   RESET
+   RESET GAME
 ========================= */
 
 function resetGame(){
 
-  state.score=0;
+  state.running = false;
 
-  state.coins=0;
+  state.paused = false;
 
-  state.lives=3;
+  state.score = 0;
 
-  state.fuel=100;
+  state.coins = 0;
 
-  state.roadSpeed=180;
+  state.lives = 3;
 
-  state.speedMultiplier=1;
+  state.fuel = 100;
 
-  state.slowTimer=0;
+  state.roadSpeed = 180;
 
-  state.spawnTimer=.5;
+  state.speedMultiplier = 1;
 
-  state.itemTimer=1;
+  state.slowTimer = 0;
 
-  state.invulnerable=0;
+  state.spawnTimer = .8;
 
-  state.flash=0;
+  state.itemTimer = 1.5;
 
-  state.cars=[];
+  state.lastTime = 0;
 
-  state.items=[];
+  state.invulnerable = 0;
 
-  state.nearMissTimer=0;
+  state.flash = 0;
 
-  state.tiltCooldown=0;
+  state.cars = [];
 
-  player.lane=1;
+  state.items = [];
 
-  player.x=
-    road.lanes[1];
+  state.nearMissTimer = 0;
 
-  player.y=650;
+  state.tiltCooldown = 0;
+
+
+  player.lane = 1;
+
+  player.x =
+    road.lanesX[1];
+
+  player.y = 650;
+
+
+  road.offset = 0;
+
 
   updateHUD();
 }
@@ -813,30 +1118,18 @@ function startGame(){
 
   resetGame();
 
-  state.running=true;
+  state.running = true;
 
-  state.paused=false;
+  state.paused = false;
 
-  titleEl.textContent=
-    "Road Rush";
+  state.lastTime =
+    performance.now();
 
-  messageEl.textContent=
-    "Avoid traffic, collect coins and fuel.";
 
-  mainBtn.textContent=
-    "Restart";
+  overlay.style.display =
+    "none";
 
-  statusEl.textContent="";
-
-  hideOverlay();
-
-  beep(
-    600,
-    .1,
-    "sine",
-    .04,
-    900
-  );
+  updateHUD();
 }
 
 
@@ -844,33 +1137,62 @@ function startGame(){
    GAME OVER
 ========================= */
 
-function gameOver(reason){
+function gameOver(){
 
-  state.running=false;
+  state.running = false;
 
-  state.paused=false;
+  state.paused = false;
 
-  crashSound();
 
-  titleEl.textContent=
-    "Game Over";
+  const finalScore =
+    Math.floor(
+      state.score
+    );
 
-  messageEl.innerHTML=
-    reason+
-    "<br><br>Score: "+
-    Math.floor(state.score)+
-    "<br>Coins: "+
-    state.coins;
 
-  mainBtn.textContent=
+  if(finalScore > highScore){
+
+    highScore = finalScore;
+
+    try{
+
+      localStorage.setItem(
+        "roadRushHighScore",
+        highScore
+      );
+
+    }catch(error){}
+  }
+
+
+  title.textContent =
+    "GAME OVER";
+
+  message.innerHTML =
+    "Score: " +
+    finalScore +
+    "<br>" +
+    "Coins: " +
+    state.coins +
+    "<br>" +
+    "Best: " +
+    highScore;
+
+
+  mainBtn.textContent =
     "Play Again";
 
-  showOverlay();
+
+  overlay.style.display =
+    "flex";
+
+
+  updateHUD();
 }
 
 
 /* =========================
-   MOVEMENT
+   MOVE PLAYER
 ========================= */
 
 function moveLeft(){
@@ -879,21 +1201,18 @@ function moveLeft(){
     !state.running ||
     state.paused
   ){
+
     return;
   }
 
-  if(
-    player.lane>0
-  ){
+  if(player.lane > 0){
 
     player.lane--;
 
-    beep(
-      500,
-      .05,
-      "square",
-      .025
-    );
+    player.x =
+      road.lanesX[
+        player.lane
+      ];
   }
 }
 
@@ -904,21 +1223,21 @@ function moveRight(){
     !state.running ||
     state.paused
   ){
+
     return;
   }
 
   if(
-    player.lane<2
+    player.lane <
+    road.lanes - 1
   ){
 
     player.lane++;
 
-    beep(
-      600,
-      .05,
-      "square",
-      .025
-    );
+    player.x =
+      road.lanesX[
+        player.lane
+      ];
   }
 }
 
@@ -932,8 +1251,8 @@ window.addEventListener(
   function(e){
 
     if(
-      e.key==="ArrowLeft" ||
-      e.key.toLowerCase()==="a"
+      e.key === "ArrowLeft" ||
+      e.key.toLowerCase() === "a"
     ){
 
       e.preventDefault();
@@ -943,8 +1262,8 @@ window.addEventListener(
 
 
     if(
-      e.key==="ArrowRight" ||
-      e.key.toLowerCase()==="d"
+      e.key === "ArrowRight" ||
+      e.key.toLowerCase() === "d"
     ){
 
       e.preventDefault();
@@ -954,14 +1273,15 @@ window.addEventListener(
 
 
     if(
-      e.key===" " ||
-      e.key.toLowerCase()==="p"
+      e.key === " " ||
+      e.key.toLowerCase() === "p"
     ){
 
       e.preventDefault();
 
       togglePause();
     }
+
   }
 );
 
@@ -970,7 +1290,9 @@ window.addEventListener(
    MOBILE BUTTONS
 ========================= */
 
-leftBtn.addEventListener(
+document.getElementById(
+  "leftBtn"
+).addEventListener(
   "pointerdown",
   function(e){
 
@@ -979,11 +1301,15 @@ leftBtn.addEventListener(
     initAudio();
 
     moveLeft();
-  }
+
+  },
+  {passive:false}
 );
 
 
-rightBtn.addEventListener(
+document.getElementById(
+  "rightBtn"
+).addEventListener(
   "pointerdown",
   function(e){
 
@@ -992,28 +1318,10 @@ rightBtn.addEventListener(
     initAudio();
 
     moveRight();
-  }
+
+  },
+  {passive:false}
 );
-
-
-/* =========================
-   OVERLAY
-========================= */
-
-function showOverlay(){
-
-  overlay.classList.remove(
-    "hidden"
-  );
-}
-
-
-function hideOverlay(){
-
-  overlay.classList.add(
-    "hidden"
-  );
-}
 
 
 /* =========================
@@ -1024,29 +1332,35 @@ mainBtn.addEventListener(
   "click",
   function(){
 
-    initAudio();
+    if(
+      !state.running
+    ){
 
-    if(state.paused){
+      startGame();
+
+    }
+    else if(
+      state.paused
+    ){
 
       resumeGame();
 
-    }else{
-
-      startGame();
     }
+
   }
 );
 
 
 /* =========================
-   BUTTON MODE
+   CONTROL MODE
 ========================= */
 
 buttonMode.addEventListener(
   "click",
   function(){
 
-    state.control="buttons";
+    state.control =
+      "buttons";
 
     buttonMode.classList.add(
       "active"
@@ -1056,103 +1370,104 @@ buttonMode.addEventListener(
       "active"
     );
 
-    helpEl.innerHTML=
-      "◀ ▶ Use buttons or Arrow Keys";
+    help.innerHTML =
+      "Buttons: use ◀ and ▶<br>" +
+      "Tap center of game to pause";
 
-    statusEl.textContent=
-      "Button control selected";
-
-    beep(
-      700,
-      .08,
-      "sine",
-      .04
-    );
   }
 );
 
-
-/* =========================
-   TILT MODE
-========================= */
 
 tiltMode.addEventListener(
   "click",
   async function(){
 
-    initAudio();
+    state.control =
+      "tilt";
+
+    buttonMode.classList.remove(
+      "active"
+    );
+
+    tiltMode.classList.add(
+      "active"
+    );
+
+
+    /*
+      iPhone/iPad permission
+    */
 
     if(
-      !("DeviceOrientationEvent"
-        in window)
+      typeof DeviceOrientationEvent !==
+      "undefined" &&
+      typeof DeviceOrientationEvent
+        .requestPermission ===
+        "function"
     ){
 
-      statusEl.textContent=
-        "Tilt is not supported on this device.";
-
-      return;
-    }
-
-    try{
-
-      if(
-        typeof DeviceOrientationEvent
-          .requestPermission ===
-        "function"
-      ){
+      try{
 
         const permission =
-          await DeviceOrientationEvent
+          await
+          DeviceOrientationEvent
             .requestPermission();
 
         if(
-          permission!=="granted"
+          permission !==
+          "granted"
         ){
 
-          statusEl.textContent=
-            "Motion permission denied.";
+          state.control =
+            "buttons";
+
+          buttonMode.classList.add(
+            "active"
+          );
+
+          tiltMode.classList.remove(
+            "active"
+          );
+
+          help.innerHTML =
+            "Tilt permission denied.<br>" +
+            "Using Buttons.";
 
           return;
         }
+
+      }catch(error){
+
+        state.control =
+          "buttons";
+
+        buttonMode.classList.add(
+          "active"
+        );
+
+        tiltMode.classList.remove(
+          "active"
+        );
+
+        help.innerHTML =
+          "Tilt unavailable.<br>" +
+          "Using Buttons.";
+
+        return;
       }
-
-
-      state.control="tilt";
-
-      tiltMode.classList.add(
-        "active"
-      );
-
-      buttonMode.classList.remove(
-        "active"
-      );
-
-      helpEl.innerHTML=
-        "📱 Tilt your phone left or right<br>"+
-        "to change lanes";
-
-      statusEl.textContent=
-        "Tilt control selected";
-
-      beep(
-        700,
-        .1,
-        "sine",
-        .05,
-        1000
-      );
-
-    }catch(error){
-
-      statusEl.textContent=
-        "Could not enable tilt.";
     }
+
+
+    help.innerHTML =
+      "Tilt phone left/right to move<br>" +
+      "Tap center of game to pause";
+
   }
 );
 
 
 /* =========================
-   PAUSE FUNCTION
+   PAUSE
 ========================= */
 
 function togglePause(){
@@ -1178,23 +1493,32 @@ function pauseGame(){
     !state.running ||
     state.paused
   ){
+
     return;
   }
 
-  state.paused=true;
+  initAudio();
+
+  state.paused = true;
 
   pauseSound();
 
-  titleEl.textContent=
-    "Game Paused";
 
-  messageEl.textContent=
-    "Choose your control method.";
+  title.textContent =
+    "PAUSED";
 
-  mainBtn.textContent=
+  message.innerHTML =
+    state.control === "tilt"
+      ? "Tilt phone left/right to move"
+      : "Use ◀ and ▶ to move";
+
+
+  mainBtn.textContent =
     "Resume";
 
-  showOverlay();
+
+  overlay.style.display =
+    "flex";
 }
 
 
@@ -1204,59 +1528,84 @@ function resumeGame(){
     !state.running ||
     !state.paused
   ){
+
     return;
   }
 
-  state.paused=false;
+  initAudio();
+
+  state.paused = false;
+
+  state.lastTime =
+    performance.now();
 
   resumeSound();
 
-  hideOverlay();
+
+  overlay.style.display =
+    "none";
 }
 
 
 /* =========================
    NEXT PART
 ========================= *//* =========================
+   PART 2 / 4
+========================= */
+
+
+/* =========================
    CREATE TRAFFIC
 ========================= */
 
 function createTraffic(){
 
-  const lane =
-    Math.floor(
-      Math.random()*3
-    );
-
-  const data =
+  const type =
     trafficTypes[
       Math.floor(
-        Math.random()*
+        Math.random() *
         trafficTypes.length
       )
     ];
 
-  return {
+
+  const lane =
+    Math.floor(
+      Math.random() *
+      road.lanes
+    );
+
+
+  const w = type.w;
+  const h = type.h;
+
+
+  const car = {
+
+    type:type.name,
 
     lane:lane,
 
     x:
-      road.lanes[lane]-
-      data.width/2,
+      road.lanesX[lane],
 
     y:
-      -data.height-20,
+      -h - 30,
 
-    width:data.width,
+    width:w,
 
-    height:data.height,
+    height:h,
 
-    color:data.color,
-
-    type:data.type,
-
-    passed:false
+    speed:
+      type.speed *
+      (
+        0.9 +
+        Math.random() * 0.2
+      )
   };
+
+
+  state.cars.push(car);
 }
 
 
@@ -1266,28 +1615,40 @@ function createTraffic(){
 
 function spawnCars(dt){
 
-  state.spawnTimer-=dt;
+  state.spawnTimer -= dt;
+
 
   if(
-    state.spawnTimer>0
+    state.spawnTimer <= 0
   ){
-    return;
+
+    createTraffic();
+
+
+    /*
+      Keep traffic speed
+      reasonable.
+    */
+
+    const difficulty =
+      Math.min(
+        state.score / 2500,
+        0.25
+      );
+
+
+    state.spawnTimer =
+      0.95 - difficulty;
+
+
+    if(
+      state.spawnTimer < 0.55
+    ){
+
+      state.spawnTimer =
+        0.55;
+    }
   }
-
-  /*
-    Keep traffic speed reasonable.
-  */
-
-  state.spawnTimer=
-    Math.max(
-      .45,
-      1.05-
-      state.roadSpeed/800
-    );
-
-  state.cars.push(
-    createTraffic()
-  );
 }
 
 
@@ -1298,196 +1659,177 @@ function spawnCars(dt){
 function updateCars(dt){
 
   for(
-    let i=
-      state.cars.length-1;
-    i>=0;
+    let i =
+      state.cars.length - 1;
+
+    i >= 0;
+
     i--
   ){
 
-    const car=
+    const car =
       state.cars[i];
 
-    car.y+=
-      state.roadSpeed*
-      state.speedMultiplier*
+
+    car.y +=
+      car.speed *
+      state.speedMultiplier *
       dt;
 
 
     /*
-      Near miss bonus
+      Near miss detection
     */
 
     if(
-      !car.passed &&
-      car.y>
-      player.y+
-      player.height
+      car.y >
+        player.y +
+        player.height &&
+      car.y <
+        player.y +
+        player.height +
+        35
     ){
 
-      car.passed=true;
-
-      const distance=
+      const distance =
         Math.abs(
-          (
-            car.x+
-            car.width/2
-          )-
+          car.x -
           player.x
         );
 
+
       if(
-        distance<65 &&
-        state.nearMissTimer<=0
+        distance <
+          55 &&
+        distance >
+          player.width / 2 +
+          5
       ){
 
-        state.score+=25;
+        state.score += 20;
 
-        state.nearMissTimer=1;
-
-        beep(
-          800,
-          .08,
-          "triangle",
-          .035,
-          1100
-        );
-
-        statusEl.textContent=
-          "+25 Near Miss!";
+        state.nearMissTimer =
+          0.8;
       }
     }
 
 
     /*
-      Remove cars outside screen
+      Remove traffic
+      after leaving screen.
     */
 
     if(
-      car.y>
-      canvas.height+120
+      car.y >
+        canvas.height + 120
     ){
 
-      state.cars.splice(
-        i,
-        1
-      );
+      state.cars.splice(i,1);
+
+      state.score += 5;
     }
   }
-
-
-  if(
-    state.nearMissTimer>0
-  ){
-
-    state.nearMissTimer-=dt;
-  }
-
-
-  checkCollisions();
 }
 
 
 /* =========================
-   COLLISION CHECK
+   COLLISION
 ========================= */
 
 function checkCollisions(){
 
   if(
-    state.invulnerable>0
+    state.invulnerable > 0
   ){
+
     return;
   }
-
-
-  const playerLeft=
-    player.x-
-    player.width/2;
-
-  const playerTop=
-    player.y-
-    player.height/2;
 
 
   for(
     const car of state.cars
   ){
 
-    const collision=
-      playerLeft<
-      car.x+
-      car.width &&
+    const hit =
+      player.x -
+        player.width / 2 <
+      car.x +
+        car.width / 2 &&
 
-      playerLeft+
-      player.width>
-      car.x &&
+      player.x +
+        player.width / 2 >
+      car.x -
+        car.width / 2 &&
 
-      playerTop<
-      car.y+
-      car.height &&
+      player.y <
+      car.y +
+        car.height &&
 
-      playerTop+
-      player.height>
+      player.y +
+        player.height >
       car.y;
 
 
-    if(collision){
+    if(hit){
 
       crashPlayer();
 
-      break;
+      return;
     }
   }
 }
 
 
 /* =========================
-   CRASH PLAYER
+   PLAYER CRASH
 ========================= */
 
 function crashPlayer(){
 
   state.lives--;
 
-  state.invulnerable=1.5;
+  state.invulnerable =
+    1.5;
 
-  state.flash=.7;
+  state.flash =
+    0.35;
+
 
   crashSound();
 
-  updateHUD();
+
+  /*
+    Remove traffic after crash
+    to give the player some space.
+  */
+
+  state.cars = [];
 
 
   if(
-    state.lives<=0
+    state.lives <= 0
   ){
 
-    gameOver(
-      "No Lives Left"
-    );
+    gameOver();
 
     return;
   }
 
 
-  statusEl.textContent=
-    "Crash! Life lost.";
-
-
   /*
-    Remove traffic close
-    to the player.
+    Put player back
+    in the middle lane.
   */
 
-  state.cars=
-    state.cars.filter(
-      function(car){
+  player.lane = 1;
 
-        return Math.abs(
-          car.y-player.y
-        )>120;
-      }
-    );
+  player.x =
+    road.lanesX[
+      player.lane
+    ];
+
+
+  updateHUD();
 }
 
 
@@ -1497,58 +1839,46 @@ function crashPlayer(){
 
 function createItem(){
 
-  const lane=
+  const types = [
+    "coin",
+    "fuel",
+    "slow"
+  ];
+
+
+  const type =
+    types[
+      Math.floor(
+        Math.random() *
+        types.length
+      )
+    ];
+
+
+  const lane =
     Math.floor(
-      Math.random()*3
+      Math.random() *
+      road.lanes
     );
 
 
-  const random=
-    Math.random();
-
-  let type;
-
-
-  /*
-    60% coin
-    22% fuel
-    18% speed reducer
-  */
-
-  if(
-    random<.60
-  ){
-
-    type="coin";
-
-  }else if(
-    random<.82
-  ){
-
-    type="fuel";
-
-  }else{
-
-    type="slow";
-  }
-
-
-  return {
+  state.items.push({
 
     type:type,
 
     lane:lane,
 
     x:
-      road.lanes[lane],
+      road.lanesX[lane],
 
     y:-35,
 
-    size:
-      type==="slow"
-      ?32
-      :28
-  };
+    size:22,
+
+    speed:
+      125 +
+      Math.random() * 30
+  });
 }
 
 
@@ -1558,23 +1888,20 @@ function createItem(){
 
 function spawnItems(dt){
 
-  state.itemTimer-=dt;
+  state.itemTimer -= dt;
+
 
   if(
-    state.itemTimer>0
+    state.itemTimer <= 0
   ){
-    return;
+
+    createItem();
+
+
+    state.itemTimer =
+      2.0 +
+      Math.random() * 2.5;
   }
-
-
-  state.itemTimer=
-    1.4+
-    Math.random()*1.4;
-
-
-  state.items.push(
-    createItem()
-  );
 }
 
 
@@ -1585,71 +1912,76 @@ function spawnItems(dt){
 function updateItems(dt){
 
   for(
-    let i=
-      state.items.length-1;
-    i>=0;
+    let i =
+      state.items.length - 1;
+
+    i >= 0;
+
     i--
   ){
 
-    const item=
+    const item =
       state.items[i];
 
 
-    item.y+=
-      state.roadSpeed*
-      state.speedMultiplier*
+    item.y +=
+      item.speed *
+      state.speedMultiplier *
       dt;
 
 
     /*
-      Collect item
+      Remove item if
+      it leaves screen.
     */
 
-    const touching=
+    if(
+      item.y >
+        canvas.height + 50
+    ){
 
-      Math.abs(
-        item.x-player.x
-      )<
-
-      player.width/2+
-      item.size/2
-
-      &&
-
-      Math.abs(
-        item.y-player.y
-      )<
-
-      player.height/2+
-      item.size/2;
-
-
-    if(touching){
-
-      collectItem(item);
-
-      state.items.splice(
-        i,
-        1
-      );
+      state.items.splice(i,1);
 
       continue;
     }
 
 
     /*
-      Remove item outside screen
+      Collision with player
     */
 
+    const dx =
+      Math.abs(
+        player.x -
+        item.x
+      );
+
+
+    const playerCenter =
+      player.y +
+      player.height / 2;
+
+
+    const dy =
+      Math.abs(
+        playerCenter -
+        item.y
+      );
+
+
     if(
-      item.y>
-      canvas.height+60
+      dx <
+        player.width / 2 +
+        item.size / 2 &&
+
+      dy <
+        player.height / 2 +
+        item.size / 2
     ){
 
-      state.items.splice(
-        i,
-        1
-      );
+      collectItem(item);
+
+      state.items.splice(i,1);
     }
   }
 }
@@ -1661,66 +1993,62 @@ function updateItems(dt){
 
 function collectItem(item){
 
-  /*
-    COIN
-  */
-
   if(
-    item.type==="coin"
+    item.type === "coin"
   ){
 
     state.coins++;
 
-    state.score+=10;
+    state.score += 25;
 
     coinSound();
-
-    statusEl.textContent=
-      "+10 Coin";
   }
 
 
-  /*
-    FUEL
-  */
-
   else if(
-    item.type==="fuel"
+    item.type === "fuel"
   ){
 
-    state.fuel=
-      Math.min(
-        100,
-        state.fuel+30
-      );
+    state.fuel += 25;
 
-    state.score+=15;
+
+    /*
+      Maximum fuel = 100
+    */
+
+    if(
+      state.fuel > 100
+    ){
+
+      state.fuel = 100;
+    }
+
+
+    state.score += 10;
 
     fuelSound();
-
-    statusEl.textContent=
-      "+30 Fuel";
   }
 
 
-  /*
-    SPEED REDUCER
-  */
-
   else if(
-    item.type==="slow"
+    item.type === "slow"
   ){
 
-    state.speedMultiplier=.55;
+    /*
+      Reduce road speed
+      for 5 seconds.
+    */
 
-    state.slowTimer=5;
+    state.speedMultiplier =
+      0.55;
 
-    state.score+=20;
+    state.slowTimer =
+      5;
+
+
+    state.score += 15;
 
     slowSound();
-
-    statusEl.textContent=
-      "🐢 Speed Reduced!";
   }
 
 
@@ -1729,142 +2057,32 @@ function collectItem(item){
 
 
 /* =========================
-   UPDATE PLAYER
+   PLAYER UPDATE
 ========================= */
 
-function updatePlayer(dt){
+function updatePlayer(){
 
-  const target=
-    road.lanes[
+  /*
+    Always keep player
+    exactly inside the
+    selected lane.
+  */
+
+  if(
+    !Array.isArray(
+      road.lanesX
+    ) ||
+    road.lanesX.length !== 3
+  ){
+
+    buildRoad();
+  }
+
+
+  player.x =
+    road.lanesX[
       player.lane
     ];
-
-
-  /*
-    Smooth movement
-  */
-
-  player.x+=
-    (
-      target-
-      player.x
-    )*
-    Math.min(
-      1,
-      dt*12
-    );
-
-
-  /*
-    Score increases slowly
-  */
-
-  state.score+=
-    dt*14;
-
-
-  /*
-    Fuel decreases slowly
-  */
-
-  state.fuel-=
-    dt*1.55;
-
-
-  /*
-    Road speed increases,
-    but never becomes too fast.
-  */
-
-  state.roadSpeed+=
-    dt*3.2;
-
-  state.roadSpeed=
-    Math.min(
-      360,
-      state.roadSpeed
-    );
-
-
-  /*
-    Speed reducer timer
-  */
-
-  if(
-    state.slowTimer>0
-  ){
-
-    state.slowTimer-=dt;
-
-
-    if(
-      state.slowTimer<=0
-    ){
-
-      state.slowTimer=0;
-
-      state.speedMultiplier=1;
-
-      statusEl.textContent="";
-    }
-  }
-
-
-  /*
-    Invulnerability timer
-  */
-
-  if(
-    state.invulnerable>0
-  ){
-
-    state.invulnerable-=dt;
-  }
-
-
-  /*
-    Crash flash timer
-  */
-
-  if(
-    state.flash>0
-  ){
-
-    state.flash-=dt;
-  }
-
-
-  /*
-    Tilt cooldown
-  */
-
-  if(
-    state.tiltCooldown>0
-  ){
-
-    state.tiltCooldown-=dt;
-  }
-
-
-  /*
-    Fuel empty
-  */
-
-  if(
-    state.fuel<=0
-  ){
-
-    state.fuel=0;
-
-    gameOver(
-      "Fuel Empty"
-    );
-
-    return;
-  }
-
-
-  updateHUD();
 }
 
 
@@ -1878,7 +2096,8 @@ function drawBackground(){
     Grass
   */
 
-  ctx.fillStyle="#208c4b";
+  ctx.fillStyle =
+    "#217a32";
 
   ctx.fillRect(
     0,
@@ -1889,32 +2108,11 @@ function drawBackground(){
 
 
   /*
-    Road shoulders
-  */
-
-  ctx.fillStyle="#6b7280";
-
-  ctx.fillRect(
-    road.x-18,
-    0,
-    18,
-    canvas.height
-  );
-
-  ctx.fillRect(
-    road.x+
-    road.width,
-    0,
-    18,
-    canvas.height
-  );
-
-
-  /*
     Road
   */
 
-  ctx.fillStyle="#30343b";
+  ctx.fillStyle =
+    "#303030";
 
   ctx.fillRect(
     road.x,
@@ -1925,255 +2123,265 @@ function drawBackground(){
 
 
   /*
-    Lane markings
-  */
-
-  const dashLength=42;
-
-  const gapLength=22;
-
-  const cycle=
-    dashLength+
-    gapLength;
-
-  const offset=
-    road.offset%cycle;
-
-
-  ctx.fillStyle="#f3f4f6";
-
-
-  for(
-    let y=-cycle+offset;
-    y<canvas.height+cycle;
-    y+=cycle
-  ){
-
-    ctx.fillRect(
-      road.x+
-      road.width/3-3,
-      y,
-      6,
-      dashLength
-    );
-
-    ctx.fillRect(
-      road.x+
-      road.width*2/3-3,
-      y,
-      6,
-      dashLength
-    );
-  }
-
-
-  /*
     Road edges
   */
 
-  ctx.fillStyle="#e5e7eb";
+  ctx.fillStyle =
+    "#eeeeee";
+
 
   ctx.fillRect(
-    road.x-2,
+    road.x,
     0,
-    4,
+    5,
     canvas.height
   );
 
+
   ctx.fillRect(
-    road.x+
-    road.width-2,
+    road.x +
+      road.width -
+      5,
     0,
-    4,
+    5,
     canvas.height
   );
+
+
+  /*
+    Lane markings
+  */
+
+  ctx.fillStyle =
+    "#ffffff";
+
+
+  const dashHeight =
+    45;
+
+  const gap =
+    35;
+
+  const total =
+    dashHeight + gap;
+
+
+  /*
+    Safety check for road offset
+  */
+
+  const offset =
+    Number.isFinite(
+      road.offset
+    )
+      ? road.offset
+      : 0;
+
+
+  for(
+    let i = 1;
+    i < road.lanes;
+    i++
+  ){
+
+    const x =
+      road.x +
+      (
+        road.width /
+        road.lanes
+      ) * i;
+
+
+    for(
+      let y =
+        -dashHeight +
+        offset;
+
+      y < canvas.height;
+
+      y += total
+    ){
+
+      ctx.fillRect(
+        x - 3,
+        y,
+        6,
+        dashHeight
+      );
+    }
+  }
 }
 
 
 /* =========================
-   DRAW CAR
+   DRAW TRAFFIC CAR
 ========================= */
 
-function drawCar(
-  x,
-  y,
-  width,
-  height,
-  color,
-  type="car",
-  playerCar=false
-){
+function drawCar(car){
 
   ctx.save();
 
+
   ctx.translate(
-    x,
-    y
+    car.x,
+    car.y
   );
+
+
+  const w =
+    car.width;
+
+  const h =
+    car.height;
+
+
+  /*
+    Vehicle colour
+  */
+
+  if(
+    car.type === "taxi"
+  ){
+
+    ctx.fillStyle =
+      "#f4c542";
+  }
+
+  else if(
+    car.type === "truck"
+  ){
+
+    ctx.fillStyle =
+      "#3d7eff";
+  }
+
+  else if(
+    car.type === "bus"
+  ){
+
+    ctx.fillStyle =
+      "#e65b5b";
+  }
+
+  else{
+
+    ctx.fillStyle =
+      "#e53935";
+  }
 
 
   /*
     Main body
   */
 
-  ctx.fillStyle=color;
-
   ctx.fillRect(
-    -width/2,
-    -height/2,
-    width,
-    height
+    -w / 2,
+    0,
+    w,
+    h
   );
 
 
   /*
-    Front window
+    Windows
   */
 
-  ctx.fillStyle=
-    playerCar
-    ? "#e5f6ff"
-    : "rgba(255,255,255,.28)";
-
-  ctx.fillRect(
-    -width/2+7,
-    -height/2+8,
-    width-14,
-    16
-  );
+  ctx.fillStyle =
+    "#b9e6ff";
 
 
-  /*
-    Rear window
-  */
+  if(
+    car.type === "bus"
+  ){
 
-  ctx.fillStyle=
-    "rgba(10,20,30,.55)";
+    ctx.fillRect(
+      -w / 2 + 6,
+      8,
+      w - 12,
+      18
+    );
 
-  ctx.fillRect(
-    -width/2+7,
-    height/2-23,
-    width-14,
-    12
-  );
+
+    ctx.fillRect(
+      -w / 2 + 6,
+      32,
+      w - 12,
+      18
+    );
+
+  }
+  else{
+
+    ctx.fillRect(
+      -w / 2 + 7,
+      10,
+      w - 14,
+      22
+    );
+  }
 
 
   /*
     Wheels
   */
 
-  ctx.fillStyle="#111827";
+  ctx.fillStyle =
+    "#111";
+
 
   ctx.fillRect(
-    -width/2+4,
-    -height/2+10,
-    7,
-    17
+    -w / 2 - 3,
+    12,
+    6,
+    18
   );
 
-  ctx.fillRect(
-    width/2-11,
-    -height/2+10,
-    7,
-    17
-  );
 
   ctx.fillRect(
-    -width/2+4,
-    height/2-27,
-    7,
-    17
+    w / 2 - 3,
+    12,
+    6,
+    18
   );
 
+
   ctx.fillRect(
-    width/2-11,
-    height/2-27,
-    7,
-    17
+    -w / 2 - 3,
+    h - 30,
+    6,
+    18
+  );
+
+
+  ctx.fillRect(
+    w / 2 - 3,
+    h - 30,
+    6,
+    18
   );
 
 
   /*
-    Taxi roof sign
+    Head lights
   */
 
-  if(
-    type==="taxi"
-  ){
-
-    ctx.fillStyle="#fff4a3";
-
-    ctx.fillRect(
-      -9,
-      -height/2-5,
-      18,
-      6
-    );
-  }
+  ctx.fillStyle =
+    "#fff6a0";
 
 
-  /*
-    Truck cargo
-  */
-
-  if(
-    type==="truck"
-  ){
-
-    ctx.fillStyle=
-      "rgba(255,255,255,.18)";
-
-    ctx.fillRect(
-      -width/2+5,
-      -height/2+28,
-      width-10,
-      height-36
-    );
-  }
+  ctx.fillRect(
+    -w / 2 + 5,
+    2,
+    8,
+    5
+  );
 
 
-  /*
-    Bus windows
-  */
-
-  if(
-    type==="bus"
-  ){
-
-    ctx.fillStyle=
-      "rgba(255,255,255,.22)";
-
-    for(
-      let i=0;
-      i<3;
-      i++
-    ){
-
-      ctx.fillRect(
-        -width/2+6,
-        -height/2+28+
-        i*16,
-        width-12,
-        10
-      );
-    }
-  }
-
-
-  /*
-    Border
-  */
-
-  ctx.strokeStyle=
-    "rgba(255,255,255,.35)";
-
-  ctx.lineWidth=2;
-
-  ctx.strokeRect(
-    -width/2+2,
-    -height/2+2,
-    width-4,
-    height-4
+  ctx.fillRect(
+    w / 2 - 13,
+    2,
+    8,
+    5
   );
 
 
@@ -2187,40 +2395,155 @@ function drawCar(
 
 function drawPlayer(){
 
+  ctx.save();
+
+
+  ctx.translate(
+    player.x,
+    player.y
+  );
+
+
   /*
-    Blink after crash
+    Hit flash
   */
 
   if(
-    state.invulnerable>0 &&
+    state.invulnerable > 0 &&
     Math.floor(
-      state.invulnerable*10
-    )%2===0
+      state.invulnerable * 10
+    ) % 2 === 0
   ){
 
-    return;
+    ctx.globalAlpha =
+      0.35;
   }
 
 
-  drawCar(
-    player.x,
-    player.y,
+  /*
+    Main body
+  */
+
+  ctx.fillStyle =
+    "#00bfff";
+
+
+  ctx.fillRect(
+    -player.width / 2,
+    0,
     player.width,
-    player.height,
-    "#ff5757",
-    "car",
-    true
+    player.height
   );
+
+
+  /*
+    Roof
+  */
+
+  ctx.fillStyle =
+    "#0b4f8a";
+
+
+  ctx.fillRect(
+    -16,
+    13,
+    32,
+    32
+  );
+
+
+  /*
+    Window
+  */
+
+  ctx.fillStyle =
+    "#bdeaff";
+
+
+  ctx.fillRect(
+    -13,
+    17,
+    26,
+    18
+  );
+
+
+  /*
+    Wheels
+  */
+
+  ctx.fillStyle =
+    "#111";
+
+
+  ctx.fillRect(
+    -player.width / 2 - 3,
+    12,
+    6,
+    20
+  );
+
+
+  ctx.fillRect(
+    player.width / 2 - 3,
+    12,
+    6,
+    20
+  );
+
+
+  ctx.fillRect(
+    -player.width / 2 - 3,
+    player.height - 32,
+    6,
+    20
+  );
+
+
+  ctx.fillRect(
+    player.width / 2 - 3,
+    player.height - 32,
+    6,
+    20
+  );
+
+
+  /*
+    Head lights
+  */
+
+  ctx.fillStyle =
+    "#ffffaa";
+
+
+  ctx.fillRect(
+    -15,
+    2,
+    9,
+    6
+  );
+
+
+  ctx.fillRect(
+    6,
+    2,
+    9,
+    6
+  );
+
+
+  ctx.restore();
 }
 
 
 /* =========================
-   DRAW ITEM
+   DRAW ITEMS
 ========================= */
 
 function drawItem(item){
 
   ctx.save();
+
 
   ctx.translate(
     item.x,
@@ -2228,42 +2551,50 @@ function drawItem(item){
   );
 
 
-  /*
-    COIN
-  */
+  /* =====================
+     COIN
+  ====================== */
 
   if(
-    item.type==="coin"
+    item.type === "coin"
   ){
-
-    ctx.fillStyle="#f6c453";
 
     ctx.beginPath();
 
     ctx.arc(
       0,
       0,
-      13,
+      item.size / 2,
       0,
-      Math.PI*2
+      Math.PI * 2
     );
+
+
+    ctx.fillStyle =
+      "#ffd700";
 
     ctx.fill();
 
-    ctx.strokeStyle="#fff3a3";
 
-    ctx.lineWidth=3;
+    ctx.strokeStyle =
+      "#fff2a0";
+
+    ctx.lineWidth = 3;
 
     ctx.stroke();
 
-    ctx.fillStyle="#805900";
 
-    ctx.font=
-      "bold 14px Arial";
+    ctx.fillStyle =
+      "#9b6b00";
 
-    ctx.textAlign="center";
+    ctx.font =
+      "bold 15px Arial";
 
-    ctx.textBaseline="middle";
+    ctx.textAlign =
+      "center";
+
+    ctx.textBaseline =
+      "middle";
 
     ctx.fillText(
       "$",
@@ -2273,85 +2604,107 @@ function drawItem(item){
   }
 
 
-  /*
-    FUEL
-  */
+  /* =====================
+     FUEL
+  ====================== */
 
-  if(
-    item.type==="fuel"
+  else if(
+    item.type === "fuel"
   ){
 
-    ctx.fillStyle="#ef4444";
+    /*
+      Fuel can
+    */
+
+    ctx.fillStyle =
+      "#ff7b00";
+
 
     ctx.fillRect(
-      -12,
-      -15,
-      24,
-      30
+      -10,
+      -14,
+      20,
+      28
     );
 
-    ctx.fillStyle="white";
 
-    ctx.font=
-      "bold 18px Arial";
+    /*
+      White label
+    */
 
-    ctx.textAlign="center";
+    ctx.fillStyle =
+      "#ffffff";
 
-    ctx.textBaseline="middle";
-
-    ctx.fillText(
-      "F",
-      0,
-      1
-    );
-
-    ctx.fillStyle="#111827";
 
     ctx.fillRect(
-      5,
-      -20,
+      -6,
+      -8,
+      12,
+      10
+    );
+
+
+    /*
+      Cap / pipe
+    */
+
+    ctx.fillStyle =
+      "#ff3333";
+
+
+    ctx.fillRect(
+      10,
+      -8,
       8,
-      6
+      5
     );
   }
 
 
-  /*
-    SPEED REDUCER
-  */
+  /* =====================
+     SPEED REDUCER
+  ====================== */
 
-  if(
-    item.type==="slow"
+  else if(
+    item.type === "slow"
   ){
-
-    ctx.fillStyle="#38bdf8";
 
     ctx.beginPath();
 
     ctx.arc(
       0,
       0,
-      16,
+      14,
       0,
-      Math.PI*2
+      Math.PI * 2
     );
+
+
+    ctx.fillStyle =
+      "#9b59ff";
 
     ctx.fill();
 
-    ctx.strokeStyle="#bae6fd";
 
-    ctx.lineWidth=3;
+    ctx.strokeStyle =
+      "#ffffff";
+
+    ctx.lineWidth = 2;
 
     ctx.stroke();
 
-    ctx.fillStyle="white";
 
-    ctx.font=
-      "bold 18px Arial";
+    ctx.fillStyle =
+      "#ffffff";
 
-    ctx.textAlign="center";
+    ctx.font =
+      "bold 13px Arial";
 
-    ctx.textBaseline="middle";
+    ctx.textAlign =
+      "center";
+
+    ctx.textBaseline =
+      "middle";
 
     ctx.fillText(
       "S",
@@ -2362,133 +2715,76 @@ function drawItem(item){
 
 
   ctx.restore();
-      }/* =========================
+}
+
+
+/* =========================
+   NEXT PART
+========================= */<script>
+/* =========================
    PART 3 / 4
 ========================= */
 
 function drawTraffic(){
-
   for(const car of state.cars){
     drawCar(car);
   }
 }
 
-
 function drawItems(){
-
   for(const item of state.items){
     drawItem(item);
   }
 }
 
+/* CENTER TAP = PAUSE */
+canvas.addEventListener("pointerdown",function(e){
+  if(!state.running || state.paused) return;
 
-/* =========================
-   PAUSE BY CENTER TAP
-========================= */
+  const rect=canvas.getBoundingClientRect();
 
-canvas.addEventListener(
-  "pointerdown",
-  function(e){
+  const x=(e.clientX-rect.left)*(canvas.width/rect.width);
+  const y=(e.clientY-rect.top)*(canvas.height/rect.height);
 
-    if(!state.running){
-      return;
-    }
+  const centerWidth=canvas.width*.45;
+  const centerHeight=canvas.height*.35;
 
-    if(state.paused){
-      return;
-    }
+  const left=(canvas.width-centerWidth)/2;
+  const top=(canvas.height-centerHeight)/2;
 
-    /*
-      Only the center area of the game
-      pauses the game.
-    */
-
-    const rect =
-      canvas.getBoundingClientRect();
-
-    const x =
-      e.clientX - rect.left;
-
-    const y =
-      e.clientY - rect.top;
-
-    const scaleX =
-      canvas.width / rect.width;
-
-    const scaleY =
-      canvas.height / rect.height;
-
-    const cx = x * scaleX;
-    const cy = y * scaleY;
-
-    const centerWidth =
-      canvas.width * 0.45;
-
-    const centerHeight =
-      canvas.height * 0.35;
-
-    const centerLeft =
-      (canvas.width - centerWidth) / 2;
-
-    const centerTop =
-      (canvas.height - centerHeight) / 2;
-
-    if(
-      cx >= centerLeft &&
-      cx <= centerLeft + centerWidth &&
-      cy >= centerTop &&
-      cy <= centerTop + centerHeight
-    ){
-
-      pauseGame();
-    }
-
-  },
-  {passive:true}
-);
+  if(
+    x>=left &&
+    x<=left+centerWidth &&
+    y>=top &&
+    y<=top+centerHeight
+  ){
+    pauseGame();
+  }
+},{passive:true});
 
 
-/* =========================
-   MOBILE TILT CONTROL
-========================= */
-
+/* TILT CONTROL */
 function handleTilt(event){
 
   if(
     !state.running ||
     state.paused ||
-    state.control !== "tilt"
-  ){
-    return;
-  }
+    state.control!=="tilt"
+  ) return;
 
-  if(state.tiltCooldown > 0){
-    return;
-  }
+  if(state.tiltCooldown>0) return;
 
-  const gamma =
-    event.gamma || 0;
-
-  /*
-    Phone tilted left
-    Phone tilted right
-  */
+  const gamma=event.gamma||0;
 
   if(gamma < -12){
-
     moveLeft();
-
-    state.tiltCooldown = 0.30;
+    state.tiltCooldown=.30;
   }
-
   else if(gamma > 12){
-
     moveRight();
-
-    state.tiltCooldown = 0.30;
+    state.tiltCooldown=.30;
   }
 }
-
 
 window.addEventListener(
   "deviceorientation",
@@ -2496,10 +2792,7 @@ window.addEventListener(
 );
 
 
-/* =========================
-   DRAW GAME
-========================= */
-
+/* DRAW EVERYTHING */
 function draw(){
 
   ctx.clearRect(
@@ -2509,34 +2802,19 @@ function draw(){
     canvas.height
   );
 
-
-  /* Background and road */
-
   drawBackground();
-
-
-  /* Items */
 
   drawItems();
 
-
-  /* Traffic */
-
   drawTraffic();
-
-
-  /* Player */
 
   drawPlayer();
 
 
-  /* Slow effect */
+  /* SLOW MODE EFFECT */
+  if(state.slowTimer>0){
 
-  if(state.slowTimer > 0){
-
-    ctx.fillStyle =
-      "rgba(155,89,255,0.10)";
-
+    ctx.fillStyle="rgba(155,89,255,.10)";
     ctx.fillRect(
       0,
       0,
@@ -2544,46 +2822,37 @@ function draw(){
       canvas.height
     );
 
-    ctx.fillStyle = "#ffffff";
-
-    ctx.font =
-      "bold 16px Arial";
-
-    ctx.textAlign = "center";
+    ctx.fillStyle="#fff";
+    ctx.font="bold 16px Arial";
+    ctx.textAlign="center";
 
     ctx.fillText(
       "SLOW MODE",
-      canvas.width / 2,
+      canvas.width/2,
       80
     );
   }
 
 
-  /* Near miss */
+  /* NEAR MISS MESSAGE */
+  if(state.nearMissTimer>0){
 
-  if(state.nearMissTimer > 0){
-
-    ctx.fillStyle = "#ffe600";
-
-    ctx.font =
-      "bold 20px Arial";
-
-    ctx.textAlign = "center";
+    ctx.fillStyle="#ffe600";
+    ctx.font="bold 20px Arial";
+    ctx.textAlign="center";
 
     ctx.fillText(
       "NICE!",
-      canvas.width / 2,
+      canvas.width/2,
       120
     );
   }
 
 
-  /* Flash effect */
+  /* CRASH FLASH */
+  if(state.flash>0){
 
-  if(state.flash > 0){
-
-    ctx.fillStyle =
-      "rgba(255,0,0,0.18)";
+    ctx.fillStyle="rgba(255,0,0,.18)";
 
     ctx.fillRect(
       0,
@@ -2594,12 +2863,10 @@ function draw(){
   }
 
 
-  /* Pause indicator */
-
+  /* PAUSE SCREEN */
   if(state.paused){
 
-    ctx.fillStyle =
-      "rgba(0,0,0,0.35)";
+    ctx.fillStyle="rgba(0,0,0,.35)";
 
     ctx.fillRect(
       0,
@@ -2608,149 +2875,135 @@ function draw(){
       canvas.height
     );
 
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle="#fff";
 
-    ctx.font =
-      "bold 28px Arial";
-
-    ctx.textAlign = "center";
+    ctx.font="bold 28px Arial";
+    ctx.textAlign="center";
 
     ctx.fillText(
       "PAUSED",
-      canvas.width / 2,
-      canvas.height / 2 - 35
+      canvas.width/2,
+      canvas.height/2-35
     );
 
-    ctx.font =
-      "16px Arial";
+    ctx.font="16px Arial";
 
     ctx.fillText(
       "Tap Resume to continue",
-      canvas.width / 2,
-      canvas.height / 2 + 5
+      canvas.width/2,
+      canvas.height/2+5
     );
 
-    ctx.font =
-      "14px Arial";
+    ctx.font="14px Arial";
 
     ctx.fillText(
-      state.control === "tilt"
+      state.control==="tilt"
         ? "Tilt phone to move"
         : "Use ◀ and ▶ buttons",
-      canvas.width / 2,
-      canvas.height / 2 + 32
+      canvas.width/2,
+      canvas.height/2+32
     );
   }
 }
 
 
-/* =========================
-   GAME LOOP
-========================= */
-
+/* MAIN GAME LOOP */
 function animate(timestamp){
 
   if(!state.lastTime){
-    state.lastTime = timestamp;
+    state.lastTime=timestamp;
   }
 
-  let dt =
-    (timestamp - state.lastTime) / 1000;
+  let dt=(timestamp-state.lastTime)/1000;
 
-  state.lastTime = timestamp;
+  state.lastTime=timestamp;
 
+  if(!Number.isFinite(dt)){
+    dt=0;
+  }
 
-  /*
-    Prevent a huge time jump
-    after switching tabs.
-  */
-
-  if(dt > 0.05){
-    dt = 0.05;
+  /* Prevent huge movement after tab switching */
+  if(dt>0.05){
+    dt=0.05;
   }
 
 
-  if(
-    state.running &&
-    !state.paused
-  ){
+  /* Prevent NaN */
+  if(!Number.isFinite(state.score)){
+    state.score=0;
+  }
 
-    /* Fuel */
+  if(!Number.isFinite(state.fuel)){
+    state.fuel=100;
+  }
 
-    state.fuel -=
-      dt * 1.8;
 
-    if(state.fuel < 0){
-      state.fuel = 0;
+  if(state.running && !state.paused){
+
+    /* FUEL DECREASE */
+    state.fuel-=dt*1.8;
+
+    if(state.fuel<0){
+      state.fuel=0;
     }
 
 
-    /* Speed reducer timer */
+    /* SLOW TIMER */
+    if(state.slowTimer>0){
 
-    if(state.slowTimer > 0){
+      state.slowTimer-=dt;
 
-      state.slowTimer -= dt;
+      if(state.slowTimer<=0){
 
-      if(state.slowTimer <= 0){
+        state.slowTimer=0;
 
-        state.slowTimer = 0;
-
-        state.speedMultiplier = 1;
+        state.speedMultiplier=1;
       }
     }
 
 
-    /* Other timers */
-
-    if(state.invulnerable > 0){
-      state.invulnerable -= dt;
+    /* TIMERS */
+    if(state.invulnerable>0){
+      state.invulnerable-=dt;
     }
 
-    if(state.flash > 0){
-      state.flash -= dt;
+    if(state.flash>0){
+      state.flash-=dt;
     }
 
-    if(state.nearMissTimer > 0){
-      state.nearMissTimer -= dt;
+    if(state.nearMissTimer>0){
+      state.nearMissTimer-=dt;
     }
 
-    if(state.tiltCooldown > 0){
-      state.tiltCooldown -= dt;
+    if(state.tiltCooldown>0){
+      state.tiltCooldown-=dt;
     }
 
 
-    /* Road movement */
-
+    /* ROAD MOVEMENT */
     road.offset +=
       state.roadSpeed *
       state.speedMultiplier *
       dt;
 
-    const dashHeight = 45;
-    const gap = 35;
-    const total =
-      dashHeight + gap;
+    const total=80;
 
-    if(road.offset >= total){
-      road.offset -= total;
+    if(road.offset>=total){
+      road.offset-=total;
     }
 
 
-    /* Score */
-
+    /* SCORE */
     state.score +=
-      dt * 5 *
+      dt *
+      5 *
       state.speedMultiplier;
 
 
-    /* Spawn */
-
+    /* GAME OBJECTS */
     spawnCars(dt);
 
     spawnItems(dt);
-
-
-    /* Update */
 
     updateCars(dt);
 
@@ -2761,11 +3014,10 @@ function animate(timestamp){
     checkCollisions();
 
 
-    /* Empty fuel = game over */
+    /* OUT OF FUEL */
+    if(state.fuel<=0){
 
-    if(state.fuel <= 0){
-
-      state.fuel = 0;
+      state.fuel=0;
 
       gameOver();
     }
@@ -2777,27 +3029,23 @@ function animate(timestamp){
 
   draw();
 
-
-  requestAnimationFrame(
-    animate
-  );
+  requestAnimationFrame(animate);
 }
 
 
-/* =========================
-   STARTUP
-========================= */
-
+/* START */
 buildRoad();
 
 resetGame();
 
 updateHUD();
 
-requestAnimationFrame(
-  animate
-);</script>
+requestAnimationFrame(animate);
+
+
+/* =========================
+   NEXT PART
+========================= */</script>
 
 </body>
-
 </html>
