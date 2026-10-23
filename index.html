@@ -6,11 +6,10 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width,
-               initial-scale=1.0,
-               viewport-fit=cover,
-               maximum-scale=1.0,
-               user-scalable=no">
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
 <title>Road Rush</title>
 
@@ -21,15 +20,13 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+html,body{
   margin:0;
-  padding:0;
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#101827;
-  font-family:Arial,system-ui,sans-serif;
+  background:#111827;
+  font-family:Arial,sans-serif;
 }
 
 body{
@@ -38,103 +35,91 @@ body{
   align-items:center;
 }
 
-.game-wrap{
+.game{
   position:relative;
-
   width:min(94vw,420px);
   height:min(94vh,760px);
-
-  max-width:420px;
-  max-height:760px;
-
-  aspect-ratio:420 / 760;
-
+  aspect-ratio:420/760;
   overflow:hidden;
-
-  border-radius:20px;
-
-  box-shadow:
-    0 15px 45px
-    rgba(0,0,0,.45);
-
-  background:#1f2937;
+  border-radius:18px;
+  background:#222;
+  box-shadow:0 10px 35px rgba(0,0,0,.5);
 }
 
 canvas{
-  display:block;
-
   width:100%;
   height:100%;
-
+  display:block;
   touch-action:none;
 }
 
 .hud{
   position:absolute;
-
   top:10px;
-  left:10px;
-  right:10px;
-
+  left:8px;
+  right:8px;
   display:flex;
-
   justify-content:space-between;
-  align-items:center;
-
-  gap:6px;
-
-  pointer-events:none;
-
+  gap:5px;
   z-index:5;
+  pointer-events:none;
 }
 
-.hud-box{
-  min-width:70px;
-
-  padding:7px 8px;
-
-  border-radius:10px;
-
-  background:
-    rgba(0,0,0,.55);
-
+.hudBox{
+  flex:1;
+  min-width:0;
+  padding:6px 3px;
+  border-radius:9px;
+  background:rgba(0,0,0,.58);
   color:white;
-
   text-align:center;
-
-  font-size:12px;
+  font-size:10px;
   font-weight:bold;
-
-  backdrop-filter:blur(5px);
 }
 
-.hud-value{
+.hudValue{
   display:block;
-
   margin-top:2px;
+  font-size:14px;
+}
 
-  font-size:15px;
+.controls{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:15px;
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  z-index:10;
+}
+
+.arrow{
+  width:65px;
+  height:52px;
+  border:0;
+  border-radius:14px;
+  background:rgba(0,0,0,.6);
+  color:white;
+  font-size:27px;
+  font-weight:bold;
+  touch-action:manipulation;
+}
+
+.arrow:active{
+  transform:scale(.92);
+  background:#2563eb;
 }
 
 .overlay{
   position:absolute;
-
   inset:0;
-
+  z-index:20;
   display:flex;
-
   justify-content:center;
   align-items:center;
-
-  padding:20px;
-
-  background:
-    rgba(5,10,20,.72);
-
-  z-index:20;
-
-  transition:
-    opacity .2s ease;
+  padding:18px;
+  background:rgba(0,0,0,.72);
 }
 
 .overlay.hidden{
@@ -142,190 +127,100 @@ canvas{
 }
 
 .panel{
-  width:min(92%,340px);
-
+  width:min(94%,350px);
   padding:22px 18px;
-
   border-radius:20px;
-
-  background:
-    rgba(17,24,39,.96);
-
+  background:#111827;
   color:white;
-
   text-align:center;
-
-  box-shadow:
-    0 15px 40px
-    rgba(0,0,0,.4);
 }
 
 .panel h1{
   margin:0 0 8px;
-
-  font-size:30px;
+  font-size:29px;
 }
 
 .panel p{
-  margin:7px 0;
-
+  margin:8px 0;
   color:#d1d5db;
-
   font-size:14px;
-
   line-height:1.4;
 }
 
-.main-btn{
+.mainBtn{
   width:100%;
-
   margin-top:14px;
-
-  padding:13px 16px;
-
+  padding:13px;
   border:0;
-
   border-radius:12px;
-
   background:#22c55e;
-
   color:white;
-
   font-size:17px;
-
   font-weight:bold;
-
   cursor:pointer;
+  touch-action:manipulation;
 }
 
-.main-btn:active{
+.mainBtn:active{
   transform:scale(.97);
 }
 
-.control-options{
+.options{
   display:flex;
-
   gap:8px;
-
   margin-top:12px;
 }
 
-.control-btn{
+.optionBtn{
   flex:1;
-
-  padding:10px 6px;
-
-  border:1px solid
-    rgba(255,255,255,.2);
-
+  padding:10px 5px;
+  border:1px solid #475569;
   border-radius:10px;
-
   background:#263244;
-
   color:white;
-
   font-size:12px;
-
   font-weight:bold;
-
   cursor:pointer;
+  touch-action:manipulation;
 }
 
-.control-btn.active{
+.optionBtn.active{
   background:#2563eb;
-
   border-color:#60a5fa;
 }
 
 .help{
   margin-top:12px;
-
-  font-size:12px;
-
   color:#cbd5e1;
-
+  font-size:12px;
   line-height:1.5;
 }
 
 .status{
   min-height:18px;
-
   margin-top:8px;
-
   color:#93c5fd;
-
   font-size:12px;
-}
-
-.mobile-controls{
-  position:absolute;
-
-  left:0;
-  right:0;
-  bottom:15px;
-
-  display:flex;
-
-  justify-content:center;
-
-  gap:22px;
-
-  z-index:10;
-
-  pointer-events:none;
-}
-
-.control-arrow{
-  width:64px;
-  height:52px;
-
-  border:0;
-
-  border-radius:15px;
-
-  background:
-    rgba(0,0,0,.58);
-
-  color:white;
-
-  font-size:28px;
-
-  font-weight:bold;
-
-  pointer-events:auto;
-
-  touch-action:manipulation;
-}
-
-.control-arrow:active{
-  transform:scale(.92);
-
-  background:
-    rgba(37,99,235,.8);
 }
 
 @media(max-height:600px){
 
-  .game-wrap{
+  .game{
     width:min(92vw,330px);
     height:min(94vh,600px);
+  }
+
+  .panel{
+    padding:16px;
   }
 
   .panel h1{
     font-size:24px;
   }
 
-  .control-arrow{
+  .arrow{
     width:55px;
     height:44px;
-  }
-}
-
-@media(min-width:700px){
-
-  .game-wrap{
-    width:420px;
-    height:760px;
   }
 }
 
@@ -337,10 +232,10 @@ canvas{
 <body>
 
 
-<div class="game-wrap">
+<div class="game" id="gameBox">
 
   <canvas
-    id="game"
+    id="gameCanvas"
     width="420"
     height="760">
   </canvas>
@@ -348,37 +243,37 @@ canvas{
 
   <div class="hud">
 
-    <div class="hud-box">
+    <div class="hudBox">
       SCORE
       <span
-        class="hud-value"
+        class="hudValue"
         id="score">
         0
       </span>
     </div>
 
-    <div class="hud-box">
+    <div class="hudBox">
       COINS
       <span
-        class="hud-value"
+        class="hudValue"
         id="coins">
         0
       </span>
     </div>
 
-    <div class="hud-box">
+    <div class="hudBox">
       LIVES
       <span
-        class="hud-value"
+        class="hudValue"
         id="lives">
         ❤️❤️❤️
       </span>
     </div>
 
-    <div class="hud-box">
+    <div class="hudBox">
       FUEL
       <span
-        class="hud-value"
+        class="hudValue"
         id="fuel">
         100
       </span>
@@ -387,17 +282,16 @@ canvas{
   </div>
 
 
-  <div
-    class="mobile-controls">
+  <div class="controls">
 
     <button
-      class="control-arrow"
+      class="arrow"
       id="leftBtn">
       ◀
     </button>
 
     <button
-      class="control-arrow"
+      class="arrow"
       id="rightBtn">
       ▶
     </button>
@@ -411,29 +305,29 @@ canvas{
 
     <div class="panel">
 
-      <h1 id="overlayTitle">
+      <h1 id="title">
         Road Rush
       </h1>
 
-      <p id="overlayText">
+      <p id="message">
         Avoid traffic, collect coins
         and keep your fuel.
       </p>
 
 
       <div
-        class="control-options"
-        id="controlOptions">
+        class="options"
+        id="options">
 
         <button
-          class="control-btn active"
-          id="buttonControl">
+          class="optionBtn active"
+          id="buttonMode">
           🎮 Buttons
         </button>
 
         <button
-          class="control-btn"
-          id="tiltControl">
+          class="optionBtn"
+          id="tiltMode">
           📱 Tilt
         </button>
 
@@ -441,7 +335,7 @@ canvas{
 
 
       <button
-        class="main-btn"
+        class="mainBtn"
         id="mainBtn">
         Start Game
       </button>
@@ -449,10 +343,8 @@ canvas{
 
       <div
         class="help"
-        id="helpText">
-
+        id="help">
         ◀ ▶ Use buttons or Arrow Keys
-
       </div>
 
 
@@ -470,96 +362,64 @@ canvas{
 
 <script>
 
-
 /* =========================
-   BASIC SETUP
+   CANVAS
 ========================= */
 
 const canvas =
   document.getElementById(
-    "game"
+    "gameCanvas"
   );
 
 const ctx =
   canvas.getContext("2d");
 
 
+/* =========================
+   HTML ELEMENTS
+========================= */
+
 const scoreEl =
-  document.getElementById(
-    "score"
-  );
+  document.getElementById("score");
 
 const coinsEl =
-  document.getElementById(
-    "coins"
-  );
+  document.getElementById("coins");
 
 const livesEl =
-  document.getElementById(
-    "lives"
-  );
+  document.getElementById("lives");
 
 const fuelEl =
-  document.getElementById(
-    "fuel"
-  );
-
+  document.getElementById("fuel");
 
 const overlay =
-  document.getElementById(
-    "overlay"
-  );
+  document.getElementById("overlay");
 
-const overlayTitle =
-  document.getElementById(
-    "overlayTitle"
-  );
+const titleEl =
+  document.getElementById("title");
 
-const overlayText =
-  document.getElementById(
-    "overlayText"
-  );
+const messageEl =
+  document.getElementById("message");
 
 const mainBtn =
-  document.getElementById(
-    "mainBtn"
-  );
+  document.getElementById("mainBtn");
 
-const controlOptions =
-  document.getElementById(
-    "controlOptions"
-  );
+const buttonMode =
+  document.getElementById("buttonMode");
 
-const buttonControl =
-  document.getElementById(
-    "buttonControl"
-  );
+const tiltMode =
+  document.getElementById("tiltMode");
 
-const tiltControl =
-  document.getElementById(
-    "tiltControl"
-  );
-
-const helpText =
-  document.getElementById(
-    "helpText"
-  );
+const helpEl =
+  document.getElementById("help");
 
 const statusEl =
-  document.getElementById(
-    "status"
-  );
-
+  document.getElementById("status");
 
 const leftBtn =
-  document.getElementById(
-    "leftBtn"
-  );
+  document.getElementById("leftBtn");
 
 const rightBtn =
-  document.getElementById(
-    "rightBtn"
-  );
+  document.getElementById("rightBtn");
 
 
 /* =========================
@@ -568,19 +428,20 @@ const rightBtn =
 
 let audioCtx=null;
 
+
 function initAudio(){
 
   if(!audioCtx){
 
     try{
 
-      audioCtx=
+      audioCtx =
         new (
           window.AudioContext ||
           window.webkitAudioContext
         )();
 
-    }catch(e){
+    }catch(error){
 
       audioCtx=null;
     }
@@ -604,24 +465,26 @@ function beep(
   endFrequency=null
 ){
 
-  if(!audioCtx) return;
+  if(!audioCtx){
+    return;
+  }
 
-  const osc =
+  const oscillator =
     audioCtx.createOscillator();
 
   const gain =
     audioCtx.createGain();
 
-  osc.type=type;
+  oscillator.type=type;
 
-  osc.frequency.setValueAtTime(
+  oscillator.frequency.setValueAtTime(
     frequency,
     audioCtx.currentTime
   );
 
   if(endFrequency){
 
-    osc.frequency.linearRampToValueAtTime(
+    oscillator.frequency.linearRampToValueAtTime(
       endFrequency,
       audioCtx.currentTime+
       duration
@@ -639,15 +502,15 @@ function beep(
     duration
   );
 
-  osc.connect(gain);
+  oscillator.connect(gain);
 
   gain.connect(
     audioCtx.destination
   );
 
-  osc.start();
+  oscillator.start();
 
-  osc.stop(
+  oscillator.stop(
     audioCtx.currentTime+
     duration
   );
@@ -672,7 +535,7 @@ function fuelSound(){
     450,
     .12,
     "sine",
-    .06,
+    .05,
     700
   );
 }
@@ -682,10 +545,10 @@ function slowSound(){
 
   beep(
     300,
-    .2,
+    .18,
     "sawtooth",
     .04,
-    160
+    150
   );
 }
 
@@ -694,9 +557,9 @@ function crashSound(){
 
   beep(
     90,
-    .28,
+    .25,
     "sawtooth",
-    .09,
+    .08,
     40
   );
 }
@@ -726,36 +589,29 @@ function resumeSound(){
 }
 
 
-function nearMissSound(){
-
-  beep(
-    700,
-    .07,
-    "triangle",
-    .035,
-    1000
-  );
-}
-
-
 /* =========================
    ROAD
 ========================= */
 
 const road={
+
   x:35,
+
   width:350,
+
   offset:0,
-  lanePositions:[]
+
+  lanes:[]
 };
 
 
-function buildLanePositions(){
+function buildRoad(){
 
   const laneWidth=
     road.width/3;
 
-  road.lanePositions=[
+  road.lanes=[
+
     road.x+
     laneWidth*.5,
 
@@ -764,6 +620,7 @@ function buildLanePositions(){
 
     road.x+
     laneWidth*2.5
+
   ];
 }
 
@@ -782,9 +639,7 @@ const player={
 
   width:46,
 
-  height:78,
-
-  targetX:210
+  height:78
 };
 
 
@@ -810,7 +665,7 @@ const state={
 
   speedMultiplier:1,
 
-  speedEffectTimer:0,
+  slowTimer:0,
 
   spawnTimer:0,
 
@@ -822,19 +677,21 @@ const state={
 
   flash:0,
 
-  controlMode:"buttons",
+  control:"buttons",
 
   cars:[],
 
   items:[],
 
-  nearMissCooldown:0
+  nearMissTimer:0,
+
+  tiltCooldown:0
 
 };
 
 
 /* =========================
-   TRAFFIC COLORS
+   TRAFFIC TYPES
 ========================= */
 
 const trafficTypes=[
@@ -871,22 +728,7 @@ const trafficTypes=[
 
 
 /* =========================
-   RESET PLAYER
-========================= */
-
-function resetPlayer(){
-
-  player.lane=1;
-
-  player.x=
-    road.lanePositions[1];
-
-  player.y=650;
-}
-
-
-/* =========================
-   HUD
+   UPDATE HUD
 ========================= */
 
 function updateHUD(){
@@ -915,16 +757,10 @@ function updateHUD(){
 
 
 /* =========================
-   START GAME
+   RESET
 ========================= */
 
-function startGame(){
-
-  initAudio();
-
-  state.running=true;
-
-  state.paused=false;
+function resetGame(){
 
   state.score=0;
 
@@ -938,9 +774,9 @@ function startGame(){
 
   state.speedMultiplier=1;
 
-  state.speedEffectTimer=0;
+  state.slowTimer=0;
 
-  state.spawnTimer=.4;
+  state.spawnTimer=.5;
 
   state.itemTimer=1;
 
@@ -952,34 +788,55 @@ function startGame(){
 
   state.items=[];
 
-  state.nearMissCooldown=0;
+  state.nearMissTimer=0;
 
-  resetPlayer();
+  state.tiltCooldown=0;
+
+  player.lane=1;
+
+  player.x=
+    road.lanes[1];
+
+  player.y=650;
 
   updateHUD();
+}
 
-  overlayTitle.textContent=
+
+/* =========================
+   START GAME
+========================= */
+
+function startGame(){
+
+  initAudio();
+
+  resetGame();
+
+  state.running=true;
+
+  state.paused=false;
+
+  titleEl.textContent=
     "Road Rush";
 
-  overlayText.textContent=
+  messageEl.textContent=
     "Avoid traffic, collect coins and fuel.";
 
   mainBtn.textContent=
     "Restart";
 
-  controlOptions.style.display=
-    "flex";
-
-  helpText.innerHTML=
-    state.controlMode==="tilt"
-    ?
-    "📱 Tilt your phone left or right<br>to change lanes"
-    :
-    "◀ ▶ Use buttons or Arrow Keys";
-
   statusEl.textContent="";
 
   hideOverlay();
+
+  beep(
+    600,
+    .1,
+    "sine",
+    .04,
+    900
+  );
 }
 
 
@@ -995,13 +852,12 @@ function gameOver(reason){
 
   crashSound();
 
-  overlayTitle.textContent=
+  titleEl.textContent=
     "Game Over";
 
-  overlayText.innerHTML=
+  messageEl.innerHTML=
     reason+
-    "<br><br>"+
-    "Score: "+
+    "<br><br>Score: "+
     Math.floor(state.score)+
     "<br>Coins: "+
     state.coins;
@@ -1009,18 +865,12 @@ function gameOver(reason){
   mainBtn.textContent=
     "Play Again";
 
-  controlOptions.style.display=
-    "flex";
-
-  helpText.innerHTML=
-    "◀ ▶ Use buttons or Arrow Keys";
-
   showOverlay();
 }
 
 
 /* =========================
-   PLAYER MOVEMENT
+   MOVEMENT
 ========================= */
 
 function moveLeft(){
@@ -1032,7 +882,9 @@ function moveLeft(){
     return;
   }
 
-  if(player.lane>0){
+  if(
+    player.lane>0
+  ){
 
     player.lane--;
 
@@ -1055,7 +907,9 @@ function moveRight(){
     return;
   }
 
-  if(player.lane<2){
+  if(
+    player.lane<2
+  ){
 
     player.lane++;
 
@@ -1075,7 +929,7 @@ function moveRight(){
 
 window.addEventListener(
   "keydown",
-  e=>{
+  function(e){
 
     if(
       e.key==="ArrowLeft" ||
@@ -1101,22 +955,12 @@ window.addEventListener(
 
     if(
       e.key===" " ||
-      e.key==="p"
+      e.key.toLowerCase()==="p"
     ){
 
       e.preventDefault();
 
-      if(state.running){
-
-        if(state.paused){
-
-          resumeGame();
-
-        }else{
-
-          pauseGame();
-        }
-      }
+      togglePause();
     }
   }
 );
@@ -1128,7 +972,7 @@ window.addEventListener(
 
 leftBtn.addEventListener(
   "pointerdown",
-  e=>{
+  function(e){
 
     e.preventDefault();
 
@@ -1141,7 +985,7 @@ leftBtn.addEventListener(
 
 rightBtn.addEventListener(
   "pointerdown",
-  e=>{
+  function(e){
 
     e.preventDefault();
 
@@ -1153,7 +997,228 @@ rightBtn.addEventListener(
 
 
 /* =========================
-   TRAFFIC CREATION
+   OVERLAY
+========================= */
+
+function showOverlay(){
+
+  overlay.classList.remove(
+    "hidden"
+  );
+}
+
+
+function hideOverlay(){
+
+  overlay.classList.add(
+    "hidden"
+  );
+}
+
+
+/* =========================
+   MAIN BUTTON
+========================= */
+
+mainBtn.addEventListener(
+  "click",
+  function(){
+
+    initAudio();
+
+    if(state.paused){
+
+      resumeGame();
+
+    }else{
+
+      startGame();
+    }
+  }
+);
+
+
+/* =========================
+   BUTTON MODE
+========================= */
+
+buttonMode.addEventListener(
+  "click",
+  function(){
+
+    state.control="buttons";
+
+    buttonMode.classList.add(
+      "active"
+    );
+
+    tiltMode.classList.remove(
+      "active"
+    );
+
+    helpEl.innerHTML=
+      "◀ ▶ Use buttons or Arrow Keys";
+
+    statusEl.textContent=
+      "Button control selected";
+
+    beep(
+      700,
+      .08,
+      "sine",
+      .04
+    );
+  }
+);
+
+
+/* =========================
+   TILT MODE
+========================= */
+
+tiltMode.addEventListener(
+  "click",
+  async function(){
+
+    initAudio();
+
+    if(
+      !("DeviceOrientationEvent"
+        in window)
+    ){
+
+      statusEl.textContent=
+        "Tilt is not supported on this device.";
+
+      return;
+    }
+
+    try{
+
+      if(
+        typeof DeviceOrientationEvent
+          .requestPermission ===
+        "function"
+      ){
+
+        const permission =
+          await DeviceOrientationEvent
+            .requestPermission();
+
+        if(
+          permission!=="granted"
+        ){
+
+          statusEl.textContent=
+            "Motion permission denied.";
+
+          return;
+        }
+      }
+
+
+      state.control="tilt";
+
+      tiltMode.classList.add(
+        "active"
+      );
+
+      buttonMode.classList.remove(
+        "active"
+      );
+
+      helpEl.innerHTML=
+        "📱 Tilt your phone left or right<br>"+
+        "to change lanes";
+
+      statusEl.textContent=
+        "Tilt control selected";
+
+      beep(
+        700,
+        .1,
+        "sine",
+        .05,
+        1000
+      );
+
+    }catch(error){
+
+      statusEl.textContent=
+        "Could not enable tilt.";
+    }
+  }
+);
+
+
+/* =========================
+   PAUSE FUNCTION
+========================= */
+
+function togglePause(){
+
+  if(!state.running){
+    return;
+  }
+
+  if(state.paused){
+
+    resumeGame();
+
+  }else{
+
+    pauseGame();
+  }
+}
+
+
+function pauseGame(){
+
+  if(
+    !state.running ||
+    state.paused
+  ){
+    return;
+  }
+
+  state.paused=true;
+
+  pauseSound();
+
+  titleEl.textContent=
+    "Game Paused";
+
+  messageEl.textContent=
+    "Choose your control method.";
+
+  mainBtn.textContent=
+    "Resume";
+
+  showOverlay();
+}
+
+
+function resumeGame(){
+
+  if(
+    !state.running ||
+    !state.paused
+  ){
+    return;
+  }
+
+  state.paused=false;
+
+  resumeSound();
+
+  hideOverlay();
+}
+
+
+/* =========================
+   NEXT PART
+========================= *//* =========================
+   CREATE TRAFFIC
 ========================= */
 
 function createTraffic(){
@@ -1176,8 +1241,8 @@ function createTraffic(){
     lane:lane,
 
     x:
-      road.lanePositions[lane]
-      -data.width/2,
+      road.lanes[lane]-
+      data.width/2,
 
     y:
       -data.height-20,
@@ -1189,8 +1254,6 @@ function createTraffic(){
     color:data.color,
 
     type:data.type,
-
-    nearMiss:false,
 
     passed:false
   };
@@ -1208,15 +1271,18 @@ function spawnCars(dt){
   if(
     state.spawnTimer>0
   ){
-
     return;
   }
 
+  /*
+    Keep traffic speed reasonable.
+  */
+
   state.spawnTimer=
     Math.max(
-      .38,
-      1.0-
-      state.roadSpeed/700
+      .45,
+      1.05-
+      state.roadSpeed/800
     );
 
   state.cars.push(
@@ -1246,6 +1312,11 @@ function updateCars(dt){
       state.speedMultiplier*
       dt;
 
+
+    /*
+      Near miss bonus
+    */
+
     if(
       !car.passed &&
       car.y>
@@ -1265,22 +1336,31 @@ function updateCars(dt){
         );
 
       if(
-        distance<
-        65 &&
-        state.nearMissCooldown<=0
+        distance<65 &&
+        state.nearMissTimer<=0
       ){
 
         state.score+=25;
 
-        state.nearMissCooldown=1;
+        state.nearMissTimer=1;
 
-        nearMissSound();
+        beep(
+          800,
+          .08,
+          "triangle",
+          .035,
+          1100
+        );
 
         statusEl.textContent=
           "+25 Near Miss!";
-
       }
     }
+
+
+    /*
+      Remove cars outside screen
+    */
 
     if(
       car.y>
@@ -1296,10 +1376,10 @@ function updateCars(dt){
 
 
   if(
-    state.nearMissCooldown>0
+    state.nearMissTimer>0
   ){
 
-    state.nearMissCooldown-=dt;
+    state.nearMissTimer-=dt;
   }
 
 
@@ -1308,7 +1388,7 @@ function updateCars(dt){
 
 
 /* =========================
-   COLLISION
+   COLLISION CHECK
 ========================= */
 
 function checkCollisions(){
@@ -1316,15 +1396,15 @@ function checkCollisions(){
   if(
     state.invulnerable>0
   ){
-
     return;
   }
 
-  const px=
+
+  const playerLeft=
     player.x-
     player.width/2;
 
-  const py=
+  const playerTop=
     player.y-
     player.height/2;
 
@@ -1333,20 +1413,25 @@ function checkCollisions(){
     const car of state.cars
   ){
 
-    const cx=car.x;
+    const collision=
+      playerLeft<
+      car.x+
+      car.width &&
 
-    const cy=car.y;
+      playerLeft+
+      player.width>
+      car.x &&
 
-    if(
-      px<
-      cx+car.width &&
-      px+player.width>
-      cx &&
-      py<
-      cy+car.height &&
-      py+player.height>
-      cy
-    ){
+      playerTop<
+      car.y+
+      car.height &&
+
+      playerTop+
+      player.height>
+      car.y;
+
+
+    if(collision){
 
       crashPlayer();
 
@@ -1372,6 +1457,7 @@ function crashPlayer(){
 
   updateHUD();
 
+
   if(
     state.lives<=0
   ){
@@ -1383,27 +1469,30 @@ function crashPlayer(){
     return;
   }
 
+
   statusEl.textContent=
     "Crash! Life lost.";
 
+
   /*
-    Remove nearby traffic
-    so the player gets a
-    short recovery chance.
+    Remove traffic close
+    to the player.
   */
 
   state.cars=
     state.cars.filter(
-      car=>
-        Math.abs(
+      function(car){
+
+        return Math.abs(
           car.y-player.y
-        )>120
+        )>120;
+      }
     );
 }
 
 
 /* =========================
-   ITEMS
+   CREATE ITEM
 ========================= */
 
 function createItem(){
@@ -1413,16 +1502,28 @@ function createItem(){
       Math.random()*3
     );
 
-  const r=
+
+  const random=
     Math.random();
 
   let type;
 
-  if(r<.60){
+
+  /*
+    60% coin
+    22% fuel
+    18% speed reducer
+  */
+
+  if(
+    random<.60
+  ){
 
     type="coin";
 
-  }else if(r<.82){
+  }else if(
+    random<.82
+  ){
 
     type="fuel";
 
@@ -1431,6 +1532,7 @@ function createItem(){
     type="slow";
   }
 
+
   return {
 
     type:type,
@@ -1438,14 +1540,14 @@ function createItem(){
     lane:lane,
 
     x:
-      road.lanePositions[lane],
+      road.lanes[lane],
 
-    y:-30,
+    y:-35,
 
     size:
       type==="slow"
-      ? 32
-      : 28
+      ?32
+      :28
   };
 }
 
@@ -1461,13 +1563,14 @@ function spawnItems(dt){
   if(
     state.itemTimer>0
   ){
-
     return;
   }
 
+
   state.itemTimer=
-    1.3+
-    Math.random()*1.5;
+    1.4+
+    Math.random()*1.4;
+
 
   state.items.push(
     createItem()
@@ -1491,24 +1594,37 @@ function updateItems(dt){
     const item=
       state.items[i];
 
+
     item.y+=
       state.roadSpeed*
       state.speedMultiplier*
       dt;
 
 
-    if(
+    /*
+      Collect item
+    */
+
+    const touching=
+
       Math.abs(
         item.x-player.x
       )<
+
       player.width/2+
-      item.size/2 &&
+      item.size/2
+
+      &&
+
       Math.abs(
         item.y-player.y
       )<
+
       player.height/2+
-      item.size/2
-    ){
+      item.size/2;
+
+
+    if(touching){
 
       collectItem(item);
 
@@ -1520,6 +1636,10 @@ function updateItems(dt){
       continue;
     }
 
+
+    /*
+      Remove item outside screen
+    */
 
     if(
       item.y>
@@ -1541,6 +1661,10 @@ function updateItems(dt){
 
 function collectItem(item){
 
+  /*
+    COIN
+  */
+
   if(
     item.type==="coin"
   ){
@@ -1556,7 +1680,11 @@ function collectItem(item){
   }
 
 
-  if(
+  /*
+    FUEL
+  */
+
+  else if(
     item.type==="fuel"
   ){
 
@@ -1575,13 +1703,17 @@ function collectItem(item){
   }
 
 
-  if(
+  /*
+    SPEED REDUCER
+  */
+
+  else if(
     item.type==="slow"
   ){
 
     state.speedMultiplier=.55;
 
-    state.speedEffectTimer=5;
+    state.slowTimer=5;
 
     state.score+=20;
 
@@ -1591,57 +1723,96 @@ function collectItem(item){
       "🐢 Speed Reduced!";
   }
 
+
   updateHUD();
 }
 
 
 /* =========================
-   PLAYER UPDATE
+   UPDATE PLAYER
 ========================= */
 
 function updatePlayer(dt){
 
   const target=
-    road.lanePositions[
+    road.lanes[
       player.lane
     ];
 
+
+  /*
+    Smooth movement
+  */
+
   player.x+=
-    (target-player.x)*
+    (
+      target-
+      player.x
+    )*
     Math.min(
       1,
       dt*12
     );
 
-  state.score+=dt*14;
 
-  state.fuel-=dt*1.55;
+  /*
+    Score increases slowly
+  */
 
-  state.roadSpeed+=dt*3.5;
+  state.score+=
+    dt*14;
+
+
+  /*
+    Fuel decreases slowly
+  */
+
+  state.fuel-=
+    dt*1.55;
+
+
+  /*
+    Road speed increases,
+    but never becomes too fast.
+  */
+
+  state.roadSpeed+=
+    dt*3.2;
 
   state.roadSpeed=
     Math.min(
-      380,
+      360,
       state.roadSpeed
     );
 
+
+  /*
+    Speed reducer timer
+  */
+
   if(
-    state.speedEffectTimer>0
+    state.slowTimer>0
   ){
 
-    state.speedEffectTimer-=dt;
+    state.slowTimer-=dt;
+
 
     if(
-      state.speedEffectTimer<=0
+      state.slowTimer<=0
     ){
 
-      state.speedEffectTimer=0;
+      state.slowTimer=0;
 
       state.speedMultiplier=1;
 
       statusEl.textContent="";
     }
   }
+
+
+  /*
+    Invulnerability timer
+  */
 
   if(
     state.invulnerable>0
@@ -1650,12 +1821,34 @@ function updatePlayer(dt){
     state.invulnerable-=dt;
   }
 
+
+  /*
+    Crash flash timer
+  */
+
   if(
     state.flash>0
   ){
 
     state.flash-=dt;
   }
+
+
+  /*
+    Tilt cooldown
+  */
+
+  if(
+    state.tiltCooldown>0
+  ){
+
+    state.tiltCooldown-=dt;
+  }
+
+
+  /*
+    Fuel empty
+  */
 
   if(
     state.fuel<=0
@@ -1670,50 +1863,34 @@ function updatePlayer(dt){
     return;
   }
 
+
   updateHUD();
-}/* =========================
+}
+
+
+/* =========================
    DRAW BACKGROUND
 ========================= */
 
 function drawBackground(){
 
-  const sky =
-    ctx.createLinearGradient(
-      0,0,
-      0,canvas.height
-    );
+  /*
+    Grass
+  */
 
-  sky.addColorStop(
+  ctx.fillStyle="#208c4b";
+
+  ctx.fillRect(
     0,
-    "#203d5e"
-  );
-
-  sky.addColorStop(
-    1,
-    "#0e1e37"
-  );
-
-  ctx.fillStyle=sky;
-
-  ctx.fillRect(
-    0,0,
+    0,
     canvas.width,
     canvas.height
   );
 
 
-  /* Grass */
-
-  ctx.fillStyle="#1f8f4d";
-
-  ctx.fillRect(
-    0,0,
-    canvas.width,
-    canvas.height
-  );
-
-
-  /* Road shoulders */
+  /*
+    Road shoulders
+  */
 
   ctx.fillStyle="#6b7280";
 
@@ -1725,16 +1902,19 @@ function drawBackground(){
   );
 
   ctx.fillRect(
-    road.x+road.width,
+    road.x+
+    road.width,
     0,
     18,
     canvas.height
   );
 
 
-  /* Road */
+  /*
+    Road
+  */
 
-  ctx.fillStyle="#2d3139";
+  ctx.fillStyle="#30343b";
 
   ctx.fillRect(
     road.x,
@@ -1744,45 +1924,54 @@ function drawBackground(){
   );
 
 
-  /* Lane markings */
+  /*
+    Lane markings
+  */
 
-  const segment=45;
-  const dash=18;
+  const dashLength=42;
 
-  const yOffset =
-    (road.offset %
-    (segment+dash)) -
-    (segment+dash);
+  const gapLength=22;
+
+  const cycle=
+    dashLength+
+    gapLength;
+
+  const offset=
+    road.offset%cycle;
+
 
   ctx.fillStyle="#f3f4f6";
 
+
   for(
-    let y=yOffset;
-    y<canvas.height+100;
-    y+=segment+dash
+    let y=-cycle+offset;
+    y<canvas.height+cycle;
+    y+=cycle
   ){
 
     ctx.fillRect(
       road.x+
-      road.width/3-4,
+      road.width/3-3,
       y,
-      8,
-      segment
+      6,
+      dashLength
     );
 
     ctx.fillRect(
       road.x+
-      2*road.width/3-4,
+      road.width*2/3-3,
       y,
-      8,
-      segment
+      6,
+      dashLength
     );
   }
 
 
-  /* Road edges */
+  /*
+    Road edges
+  */
 
-  ctx.fillStyle="#d1d5db";
+  ctx.fillStyle="#e5e7eb";
 
   ctx.fillRect(
     road.x-2,
@@ -1812,15 +2001,20 @@ function drawCar(
   height,
   color,
   type="car",
-  isPlayer=false
+  playerCar=false
 ){
 
   ctx.save();
 
-  ctx.translate(x,y);
+  ctx.translate(
+    x,
+    y
+  );
 
 
-  /* Main body */
+  /*
+    Main body
+  */
 
   ctx.fillStyle=color;
 
@@ -1832,25 +2026,29 @@ function drawCar(
   );
 
 
-  /* Front window */
+  /*
+    Front window
+  */
 
-  ctx.fillStyle =
-    isPlayer
-    ? "#f8fafc"
+  ctx.fillStyle=
+    playerCar
+    ? "#e5f6ff"
     : "rgba(255,255,255,.28)";
 
   ctx.fillRect(
     -width/2+7,
     -height/2+8,
     width-14,
-    15
+    16
   );
 
 
-  /* Rear window */
+  /*
+    Rear window
+  */
 
   ctx.fillStyle=
-    "rgba(20,30,45,.55)";
+    "rgba(10,20,30,.55)";
 
   ctx.fillRect(
     -width/2+7,
@@ -1860,7 +2058,9 @@ function drawCar(
   );
 
 
-  /* Wheels */
+  /*
+    Wheels
+  */
 
   ctx.fillStyle="#111827";
 
@@ -1893,11 +2093,15 @@ function drawCar(
   );
 
 
-  /* Taxi sign */
+  /*
+    Taxi roof sign
+  */
 
-  if(type==="taxi"){
+  if(
+    type==="taxi"
+  ){
 
-    ctx.fillStyle="#fff7b2";
+    ctx.fillStyle="#fff4a3";
 
     ctx.fillRect(
       -9,
@@ -1908,25 +2112,33 @@ function drawCar(
   }
 
 
-  /* Truck */
+  /*
+    Truck cargo
+  */
 
-  if(type==="truck"){
+  if(
+    type==="truck"
+  ){
 
     ctx.fillStyle=
       "rgba(255,255,255,.18)";
 
     ctx.fillRect(
       -width/2+5,
-      -height/2+27,
+      -height/2+28,
       width-10,
-      height-35
+      height-36
     );
   }
 
 
-  /* Bus windows */
+  /*
+    Bus windows
+  */
 
-  if(type==="bus"){
+  if(
+    type==="bus"
+  ){
 
     ctx.fillStyle=
       "rgba(255,255,255,.22)";
@@ -1939,7 +2151,8 @@ function drawCar(
 
       ctx.fillRect(
         -width/2+6,
-        -height/2+28+i*15,
+        -height/2+28+
+        i*16,
         width-12,
         10
       );
@@ -1947,7 +2160,9 @@ function drawCar(
   }
 
 
-  /* Border */
+  /*
+    Border
+  */
 
   ctx.strokeStyle=
     "rgba(255,255,255,.35)";
@@ -1961,15 +2176,20 @@ function drawCar(
     height-4
   );
 
+
   ctx.restore();
 }
 
 
 /* =========================
-   PLAYER DRAW
+   DRAW PLAYER
 ========================= */
 
 function drawPlayer(){
+
+  /*
+    Blink after crash
+  */
 
   if(
     state.invulnerable>0 &&
@@ -1981,12 +2201,13 @@ function drawPlayer(){
     return;
   }
 
+
   drawCar(
     player.x,
     player.y,
     player.width,
     player.height,
-    "#ff5a5f",
+    "#ff5757",
     "car",
     true
   );
@@ -1994,7 +2215,7 @@ function drawPlayer(){
 
 
 /* =========================
-   DRAW ITEMS
+   DRAW ITEM
 ========================= */
 
 function drawItem(item){
@@ -2007,9 +2228,13 @@ function drawItem(item){
   );
 
 
-  /* COIN */
+  /*
+    COIN
+  */
 
-  if(item.type==="coin"){
+  if(
+    item.type==="coin"
+  ){
 
     ctx.fillStyle="#f6c453";
 
@@ -2031,7 +2256,7 @@ function drawItem(item){
 
     ctx.stroke();
 
-    ctx.fillStyle="#8a5b00";
+    ctx.fillStyle="#805900";
 
     ctx.font=
       "bold 14px Arial";
@@ -2048,9 +2273,13 @@ function drawItem(item){
   }
 
 
-  /* FUEL */
+  /*
+    FUEL
+  */
 
-  if(item.type==="fuel"){
+  if(
+    item.type==="fuel"
+  ){
 
     ctx.fillStyle="#ef4444";
 
@@ -2061,7 +2290,7 @@ function drawItem(item){
       30
     );
 
-    ctx.fillStyle="#f8fafc";
+    ctx.fillStyle="white";
 
     ctx.font=
       "bold 18px Arial";
@@ -2087,9 +2316,13 @@ function drawItem(item){
   }
 
 
-  /* SPEED REDUCER */
+  /*
+    SPEED REDUCER
+  */
 
-  if(item.type==="slow"){
+  if(
+    item.type==="slow"
+  ){
 
     ctx.fillStyle="#38bdf8";
 
@@ -2127,534 +2360,418 @@ function drawItem(item){
     );
   }
 
+
   ctx.restore();
-}
-
-
-/* =========================
-   DRAW TRAFFIC
+      }/* =========================
+   PART 3 / 4
 ========================= */
 
 function drawTraffic(){
 
-  for(
-    const car of state.cars
-  ){
-
-    drawCar(
-      car.x+car.width/2,
-      car.y+car.height/2,
-      car.width,
-      car.height,
-      car.color,
-      car.type,
-      false
-    );
+  for(const car of state.cars){
+    drawCar(car);
   }
 }
 
 
-/* =========================
-   DRAW ALL ITEMS
-========================= */
-
 function drawItems(){
 
-  for(
-    const item of state.items
-  ){
-
+  for(const item of state.items){
     drawItem(item);
   }
 }
 
 
 /* =========================
-   PAUSE GAME
+   PAUSE BY CENTER TAP
 ========================= */
 
-function pauseGame(){
+canvas.addEventListener(
+  "pointerdown",
+  function(e){
 
-  if(
-    !state.running ||
-    state.paused
-  ){
-
-    return;
-  }
-
-  state.paused=true;
-
-  pauseSound();
-
-  overlayTitle.textContent=
-    "Game Paused";
-
-  overlayText.textContent=
-    "Choose your control method";
-
-  mainBtn.textContent=
-    "Resume";
-
-  controlOptions.style.display=
-    "flex";
-
-
-  if(
-    state.controlMode==="tilt"
-  ){
-
-    helpText.innerHTML=
-      "📱 Tilt your phone left or right<br>"+
-      "to change lanes";
-
-  }else{
-
-    helpText.innerHTML=
-      "◀ ▶ Use buttons or Arrow Keys";
-  }
-
-  statusEl.textContent="";
-
-  showOverlay();
-}
-
-
-/* =========================
-   RESUME GAME
-========================= */
-
-function resumeGame(){
-
-  if(
-    !state.running ||
-    !state.paused
-  ){
-
-    return;
-  }
-
-  state.paused=false;
-
-  resumeSound();
-
-  hideOverlay();
-}
-
-
-/* =========================
-   OVERLAY
-========================= */
-
-function showOverlay(){
-
-  overlay.classList.remove(
-    "hidden"
-  );
-}
-
-
-function hideOverlay(){
-
-  overlay.classList.add(
-    "hidden"
-  );
-}
-
-
-/* =========================
-   MAIN BUTTON
-========================= */
-
-mainBtn.addEventListener(
-  "click",
-  ()=>{
-
-    initAudio();
-
-    if(state.paused){
-
-      resumeGame();
-
-    }else{
-
-      startGame();
-    }
-  }
-);
-
-
-/* =========================
-   BUTTON CONTROL
-========================= */
-
-buttonControl.addEventListener(
-  "click",
-  ()=>{
-
-    state.controlMode=
-      "buttons";
-
-    buttonControl.classList.add(
-      "active"
-    );
-
-    tiltControl.classList.remove(
-      "active"
-    );
-
-    helpText.innerHTML=
-      "◀ ▶ Use buttons or Arrow Keys";
-
-    statusEl.textContent=
-      "Button control selected";
-  }
-);
-
-
-/* =========================
-   TILT CONTROL
-========================= */
-
-tiltControl.addEventListener(
-  "click",
-  async ()=>{
-
-    initAudio();
-
-    if(
-      !("DeviceOrientationEvent"
-        in window)
-    ){
-
-      statusEl.textContent=
-        "Tilt control is not supported.";
-
+    if(!state.running){
       return;
     }
 
+    if(state.paused){
+      return;
+    }
+
+    /*
+      Only the center area of the game
+      pauses the game.
+    */
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+    const x =
+      e.clientX - rect.left;
+
+    const y =
+      e.clientY - rect.top;
+
+    const scaleX =
+      canvas.width / rect.width;
+
+    const scaleY =
+      canvas.height / rect.height;
+
+    const cx = x * scaleX;
+    const cy = y * scaleY;
+
+    const centerWidth =
+      canvas.width * 0.45;
+
+    const centerHeight =
+      canvas.height * 0.35;
+
+    const centerLeft =
+      (canvas.width - centerWidth) / 2;
+
+    const centerTop =
+      (canvas.height - centerHeight) / 2;
 
     if(
-      typeof DeviceOrientationEvent
-        .requestPermission ===
-      "function"
+      cx >= centerLeft &&
+      cx <= centerLeft + centerWidth &&
+      cy >= centerTop &&
+      cy <= centerTop + centerHeight
     ){
 
-      try{
+      pauseGame();
+    }
 
-        const permission =
-          await DeviceOrientationEvent
-            .requestPermission();
+  },
+  {passive:true}
+);
 
-        if(
-          permission!=="granted"
-        ){
 
-          statusEl.textContent=
-            "Motion permission denied.";
+/* =========================
+   MOBILE TILT CONTROL
+========================= */
 
-          return;
-        }
+function handleTilt(event){
 
-      }catch(error){
+  if(
+    !state.running ||
+    state.paused ||
+    state.control !== "tilt"
+  ){
+    return;
+  }
 
-        statusEl.textContent=
-          "Could not enable tilt.";
+  if(state.tiltCooldown > 0){
+    return;
+  }
 
-        return;
+  const gamma =
+    event.gamma || 0;
+
+  /*
+    Phone tilted left
+    Phone tilted right
+  */
+
+  if(gamma < -12){
+
+    moveLeft();
+
+    state.tiltCooldown = 0.30;
+  }
+
+  else if(gamma > 12){
+
+    moveRight();
+
+    state.tiltCooldown = 0.30;
+  }
+}
+
+
+window.addEventListener(
+  "deviceorientation",
+  handleTilt
+);
+
+
+/* =========================
+   DRAW GAME
+========================= */
+
+function draw(){
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  /* Background and road */
+
+  drawBackground();
+
+
+  /* Items */
+
+  drawItems();
+
+
+  /* Traffic */
+
+  drawTraffic();
+
+
+  /* Player */
+
+  drawPlayer();
+
+
+  /* Slow effect */
+
+  if(state.slowTimer > 0){
+
+    ctx.fillStyle =
+      "rgba(155,89,255,0.10)";
+
+    ctx.fillRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.font =
+      "bold 16px Arial";
+
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+      "SLOW MODE",
+      canvas.width / 2,
+      80
+    );
+  }
+
+
+  /* Near miss */
+
+  if(state.nearMissTimer > 0){
+
+    ctx.fillStyle = "#ffe600";
+
+    ctx.font =
+      "bold 20px Arial";
+
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+      "NICE!",
+      canvas.width / 2,
+      120
+    );
+  }
+
+
+  /* Flash effect */
+
+  if(state.flash > 0){
+
+    ctx.fillStyle =
+      "rgba(255,0,0,0.18)";
+
+    ctx.fillRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+  }
+
+
+  /* Pause indicator */
+
+  if(state.paused){
+
+    ctx.fillStyle =
+      "rgba(0,0,0,0.35)";
+
+    ctx.fillRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.font =
+      "bold 28px Arial";
+
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+      "PAUSED",
+      canvas.width / 2,
+      canvas.height / 2 - 35
+    );
+
+    ctx.font =
+      "16px Arial";
+
+    ctx.fillText(
+      "Tap Resume to continue",
+      canvas.width / 2,
+      canvas.height / 2 + 5
+    );
+
+    ctx.font =
+      "14px Arial";
+
+    ctx.fillText(
+      state.control === "tilt"
+        ? "Tilt phone to move"
+        : "Use ◀ and ▶ buttons",
+      canvas.width / 2,
+      canvas.height / 2 + 32
+    );
+  }
+}
+
+
+/* =========================
+   GAME LOOP
+========================= */
+
+function animate(timestamp){
+
+  if(!state.lastTime){
+    state.lastTime = timestamp;
+  }
+
+  let dt =
+    (timestamp - state.lastTime) / 1000;
+
+  state.lastTime = timestamp;
+
+
+  /*
+    Prevent a huge time jump
+    after switching tabs.
+  */
+
+  if(dt > 0.05){
+    dt = 0.05;
+  }
+
+
+  if(
+    state.running &&
+    !state.paused
+  ){
+
+    /* Fuel */
+
+    state.fuel -=
+      dt * 1.8;
+
+    if(state.fuel < 0){
+      state.fuel = 0;
+    }
+
+
+    /* Speed reducer timer */
+
+    if(state.slowTimer > 0){
+
+      state.slowTimer -= dt;
+
+      if(state.slowTimer <= 0){
+
+        state.slowTimer = 0;
+
+        state.speedMultiplier = 1;
       }
     }
 
 
-    state.controlMode="tilt";
+    /* Other timers */
 
-    tiltControl.classList.add(
-      "active"
-    );
-
-    buttonControl.classList.remove(
-      "active"
-    );
-
-    helpText.innerHTML=
-      "📱 Tilt your phone left or right<br>"+
-      "to change lanes";
-
-    statusEl.textContent=
-      "Tilt control enabled";
-
-    beep(
-      700,
-      .1,
-      "sine",
-      .05,
-      200
-    );
-  }
-);/* =========================
-   CENTER PAUSE
-========================= */
-
-canvas.addEventListener(
-  "pointerdown",
-  e=>{
-
-    if(
-      !state.running ||
-      state.paused
-    ){
-
-      return;
+    if(state.invulnerable > 0){
+      state.invulnerable -= dt;
     }
 
-    const rect =
-      canvas.getBoundingClientRect();
-
-    const x =
-      (e.clientX-rect.left) *
-      canvas.width /
-      rect.width;
-
-    const y =
-      (e.clientY-rect.top) *
-      canvas.height /
-      rect.height;
-
-
-    /*
-      Center area used for pause.
-      Avoids accidental pause near
-      the control buttons.
-    */
-
-    const centerX =
-      canvas.width/2;
-
-    const centerWidth=120;
-
-    const centerTop=180;
-
-    const centerBottom=570;
-
-
-    if(
-      Math.abs(
-        x-centerX
-      )<
-      centerWidth/2 &&
-      y>centerTop &&
-      y<centerBottom
-    ){
-
-      pauseGame();
+    if(state.flash > 0){
+      state.flash -= dt;
     }
-  }
-);
+
+    if(state.nearMissTimer > 0){
+      state.nearMissTimer -= dt;
+    }
+
+    if(state.tiltCooldown > 0){
+      state.tiltCooldown -= dt;
+    }
 
 
-/* =========================
-   TILT CONTROL
-========================= */
+    /* Road movement */
 
-let tiltCooldown=0;
+    road.offset +=
+      state.roadSpeed *
+      state.speedMultiplier *
+      dt;
 
+    const dashHeight = 45;
+    const gap = 35;
+    const total =
+      dashHeight + gap;
 
-function handleTilt(event){
-
-  if(
-    !state.running ||
-    state.paused ||
-    state.controlMode!=="tilt"
-  ){
-
-    return;
-  }
+    if(road.offset >= total){
+      road.offset -= total;
+    }
 
 
-  if(
-    tiltCooldown>0
-  ){
+    /* Score */
 
-    return;
-  }
-
-
-  const gamma =
-    event.gamma || 0;
+    state.score +=
+      dt * 5 *
+      state.speedMultiplier;
 
 
-  /*
-    Tilt left
-  */
-
-  if(
-    gamma < -12
-  ){
-
-    moveLeft();
-
-    tiltCooldown=.45;
-  }
-
-
-  /*
-    Tilt right
-  */
-
-  else if(
-    gamma > 12
-  ){
-
-    moveRight();
-
-    tiltCooldown=.45;
-  }
-}
-
-
-window.addEventListener(
-  "deviceorientation",
-  handleTilt
-);
-
-
-/* =========================
-   UPDATE TILT
-========================= */
-
-function updateTilt(dt){
-
-  if(
-    tiltCooldown>0
-  ){
-
-    tiltCooldown-=dt;
-  }
-}
-
-
-/* =========================
-   DRAW
-========================= */
-
-function draw(){
-
-  drawBackground();
-
-
-  /*
-    Moving road
-  */
-
-  road.offset=
-    (
-      road.offset+
-      state.roadSpeed*
-      state.speedMultiplier*
-      .15
-    )%1000;
-
-
-  drawItems();
-
-  drawTraffic();
-
-  drawPlayer();
-
-
-  /*
-    Speed reducer indicator
-  */
-
-  if(
-    state.speedEffectTimer>0
-  ){
-
-    ctx.save();
-
-    ctx.fillStyle=
-      "rgba(56,189,248,.85)";
-
-    ctx.font=
-      "bold 14px system-ui";
-
-    ctx.textAlign="center";
-
-    ctx.fillText(
-      "🐢 SPEED REDUCED "+
-      Math.ceil(
-        state.speedEffectTimer
-      ),
-      canvas.width/2,
-      92
-    );
-
-    ctx.restore();
-  }
-
-
-  /*
-    Crash flash
-  */
-
-  if(
-    state.flash>0
-  ){
-
-    ctx.fillStyle=
-      "rgba(239,68,68,"+
-      Math.min(
-        .22,
-        state.flash*.3
-      )+
-      ")";
-
-    ctx.fillRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-  }
-}
-
-
-/* =========================
-   GAME LOOP
-========================= */
-
-function animate(ts){
-
-  const dt=
-    Math.min(
-      .033,
-      (ts-state.lastTime)/1000
-      || .016
-    );
-
-  state.lastTime=ts;
-
-
-  if(
-    state.running &&
-    !state.paused
-  ){
+    /* Spawn */
 
     spawnCars(dt);
 
     spawnItems(dt);
 
+
+    /* Update */
+
     updateCars(dt);
 
+    updateItems(dt);
 
-    if(state.running){
+    updatePlayer();
 
-      updateItems(dt);
+    checkCollisions();
 
-      updatePlayer(dt);
 
-      updateTilt(dt);
+    /* Empty fuel = game over */
+
+    if(state.fuel <= 0){
+
+      state.fuel = 0;
+
+      gameOver();
     }
+
+
+    updateHUD();
   }
 
 
@@ -2668,304 +2785,14 @@ function animate(ts){
 
 
 /* =========================
-   INITIALIZE
+   STARTUP
 ========================= */
 
-buildLanePositions();
+buildRoad();
 
-resetPlayer();
+resetGame();
 
 updateHUD();
-
-
-requestAnimationFrame(
-  animate
-);/* =========================
-   CENTER PAUSE
-========================= */
-
-canvas.addEventListener(
-  "pointerdown",
-  e=>{
-
-    if(
-      !state.running ||
-      state.paused
-    ){
-
-      return;
-    }
-
-    const rect =
-      canvas.getBoundingClientRect();
-
-    const x =
-      (e.clientX-rect.left) *
-      canvas.width /
-      rect.width;
-
-    const y =
-      (e.clientY-rect.top) *
-      canvas.height /
-      rect.height;
-
-
-    /*
-      Center area used for pause.
-      Avoids accidental pause near
-      the control buttons.
-    */
-
-    const centerX =
-      canvas.width/2;
-
-    const centerWidth=120;
-
-    const centerTop=180;
-
-    const centerBottom=570;
-
-
-    if(
-      Math.abs(
-        x-centerX
-      )<
-      centerWidth/2 &&
-      y>centerTop &&
-      y<centerBottom
-    ){
-
-      pauseGame();
-    }
-  }
-);
-
-
-/* =========================
-   TILT CONTROL
-========================= */
-
-let tiltCooldown=0;
-
-
-function handleTilt(event){
-
-  if(
-    !state.running ||
-    state.paused ||
-    state.controlMode!=="tilt"
-  ){
-
-    return;
-  }
-
-
-  if(
-    tiltCooldown>0
-  ){
-
-    return;
-  }
-
-
-  const gamma =
-    event.gamma || 0;
-
-
-  /*
-    Tilt left
-  */
-
-  if(
-    gamma < -12
-  ){
-
-    moveLeft();
-
-    tiltCooldown=.45;
-  }
-
-
-  /*
-    Tilt right
-  */
-
-  else if(
-    gamma > 12
-  ){
-
-    moveRight();
-
-    tiltCooldown=.45;
-  }
-}
-
-
-window.addEventListener(
-  "deviceorientation",
-  handleTilt
-);
-
-
-/* =========================
-   UPDATE TILT
-========================= */
-
-function updateTilt(dt){
-
-  if(
-    tiltCooldown>0
-  ){
-
-    tiltCooldown-=dt;
-  }
-}
-
-
-/* =========================
-   DRAW
-========================= */
-
-function draw(){
-
-  drawBackground();
-
-
-  /*
-    Moving road
-  */
-
-  road.offset=
-    (
-      road.offset+
-      state.roadSpeed*
-      state.speedMultiplier*
-      .15
-    )%1000;
-
-
-  drawItems();
-
-  drawTraffic();
-
-  drawPlayer();
-
-
-  /*
-    Speed reducer indicator
-  */
-
-  if(
-    state.speedEffectTimer>0
-  ){
-
-    ctx.save();
-
-    ctx.fillStyle=
-      "rgba(56,189,248,.85)";
-
-    ctx.font=
-      "bold 14px system-ui";
-
-    ctx.textAlign="center";
-
-    ctx.fillText(
-      "🐢 SPEED REDUCED "+
-      Math.ceil(
-        state.speedEffectTimer
-      ),
-      canvas.width/2,
-      92
-    );
-
-    ctx.restore();
-  }
-
-
-  /*
-    Crash flash
-  */
-
-  if(
-    state.flash>0
-  ){
-
-    ctx.fillStyle=
-      "rgba(239,68,68,"+
-      Math.min(
-        .22,
-        state.flash*.3
-      )+
-      ")";
-
-    ctx.fillRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-  }
-}
-
-
-/* =========================
-   GAME LOOP
-========================= */
-
-function animate(ts){
-
-  const dt=
-    Math.min(
-      .033,
-      (ts-state.lastTime)/1000
-      || .016
-    );
-
-  state.lastTime=ts;
-
-
-  if(
-    state.running &&
-    !state.paused
-  ){
-
-    spawnCars(dt);
-
-    spawnItems(dt);
-
-    updateCars(dt);
-
-
-    if(state.running){
-
-      updateItems(dt);
-
-      updatePlayer(dt);
-
-      updateTilt(dt);
-    }
-  }
-
-
-  draw();
-
-
-  requestAnimationFrame(
-    animate
-  );
-}
-
-
-/* =========================
-   INITIALIZE
-========================= */
-
-buildLanePositions();
-
-resetPlayer();
-
-updateHUD();
-
 
 requestAnimationFrame(
   animate
