@@ -290,25 +290,6 @@ canvas{
 
 
 /* =========================
-   PAUSE
-========================= */
-
-.pauseText{
-  position:absolute;
-
-  left:50%;
-  top:50%;
-
-  transform:
-    translate(-50%,-50%);
-
-  z-index:5;
-
-  pointer-events:none;
-}
-
-
-/* =========================
    SMALL SCREEN
 ========================= */
 
@@ -340,9 +321,7 @@ canvas{
 
 <body>
 
-
 <div class="game" id="gameBox">
-
 
 <canvas
   id="gameCanvas"
@@ -358,51 +337,29 @@ canvas{
 <div class="hud">
 
   <div class="hudBox">
-
     SCORE
-
-    <span id="score">
-      0
-    </span>
-
+    <span id="score">0</span>
   </div>
 
-
   <div class="hudBox">
-
     COINS
-
-    <span id="coins">
-      0
-    </span>
-
+    <span id="coins">0</span>
   </div>
-
 
   <div class="hudBox">
-
     LIVES
-
-    <span id="lives">
-      ❤️ 3
-    </span>
-
+    <span id="lives">❤️ 3</span>
   </div>
-
 
   <div class="hudBox fuelBox">
 
     FUEL
 
     <div class="fuelBar">
-
       <div id="fuelFill"></div>
-
     </div>
 
-    <span id="fuel">
-      100%
-    </span>
+    <span id="fuel">100%</span>
 
   </div>
 
@@ -410,7 +367,7 @@ canvas{
 
 
 <!-- =========================
-     START / PAUSE / GAME OVER
+     OVERLAY
 ========================= -->
 
 <div class="overlay" id="overlay">
@@ -465,15 +422,12 @@ canvas{
 
 <script>
 
-
 /* =====================================================
    BASIC SETUP
 ===================================================== */
 
 const canvas =
-  document.getElementById(
-    "gameCanvas"
-  );
+  document.getElementById("gameCanvas");
 
 const ctx =
   canvas.getContext("2d");
@@ -504,44 +458,28 @@ const fuelFill =
 ===================================================== */
 
 const gameBox =
-  document.getElementById(
-    "gameBox"
-  );
+  document.getElementById("gameBox");
 
 const overlay =
-  document.getElementById(
-    "overlay"
-  );
+  document.getElementById("overlay");
 
 const title =
-  document.getElementById(
-    "title"
-  );
+  document.getElementById("title");
 
 const message =
-  document.getElementById(
-    "message"
-  );
+  document.getElementById("message");
 
 const mainBtn =
-  document.getElementById(
-    "mainBtn"
-  );
+  document.getElementById("mainBtn");
 
 const help =
-  document.getElementById(
-    "help"
-  );
+  document.getElementById("help");
 
 const leftBtn =
-  document.getElementById(
-    "leftBtn"
-  );
+  document.getElementById("leftBtn");
 
 const rightBtn =
-  document.getElementById(
-    "rightBtn"
-  );
+  document.getElementById("rightBtn");
 
 
 /* =====================================================
@@ -560,9 +498,7 @@ function initAudio(){
       window.webkitAudioContext;
 
     if(AudioCtx){
-
-      audioContext =
-        new AudioCtx();
+      audioContext=new AudioCtx();
     }
   }
 
@@ -570,7 +506,6 @@ function initAudio(){
     audioContext &&
     audioContext.state==="suspended"
   ){
-
     audioContext.resume();
   }
 }
@@ -583,8 +518,7 @@ function beep(
   volume=.06
 ){
 
-  if(!audioContext)
-    return;
+  if(!audioContext) return;
 
   try{
 
@@ -594,38 +528,28 @@ function beep(
     const gain =
       audioContext.createGain();
 
-
     oscillator.type=type;
 
     oscillator.frequency.value=
       frequency;
-
 
     gain.gain.setValueAtTime(
       volume,
       audioContext.currentTime
     );
 
-
     gain.gain.exponentialRampToValueAtTime(
       .001,
-      audioContext.currentTime+
-      duration
+      audioContext.currentTime+duration
     );
-
 
     oscillator.connect(gain);
-
-    gain.connect(
-      audioContext.destination
-    );
-
+    gain.connect(audioContext.destination);
 
     oscillator.start();
 
     oscillator.stop(
-      audioContext.currentTime+
-      duration
+      audioContext.currentTime+duration
     );
 
   }catch(error){}
@@ -634,95 +558,49 @@ function beep(
 
 function coinSound(){
 
-  beep(
-    880,
-    .08,
-    "square",
-    .05
-  );
+  beep(880,.08,"square",.05);
 
-  setTimeout(
-    function(){
+  setTimeout(function(){
 
-      beep(
-        1200,
-        .08,
-        "square",
-        .04
-      );
+    beep(1200,.08,"square",.04);
 
-    },
-    60
-  );
+  },60);
 }
 
 
 function fuelSound(){
 
-  beep(
-    500,
-    .12,
-    "sine",
-    .06
-  );
+  beep(500,.12,"sine",.06);
 
-  setTimeout(
-    function(){
+  setTimeout(function(){
 
-      beep(
-        750,
-        .12,
-        "sine",
-        .05
-      );
+    beep(750,.12,"sine",.05);
 
-    },
-    80
-  );
+  },80);
 }
 
 
 function slowSound(){
 
-  beep(
-    250,
-    .25,
-    "triangle",
-    .06
-  );
+  beep(250,.25,"triangle",.06);
 }
 
 
 function crashSound(){
 
-  beep(
-    90,
-    .3,
-    "sawtooth",
-    .08
-  );
+  beep(90,.3,"sawtooth",.08);
 }
 
 
 function pauseSound(){
 
-  beep(
-    350,
-    .08,
-    "sine",
-    .04
-  );
+  beep(350,.08,"sine",.04);
 }
 
 
 function resumeSound(){
 
-  beep(
-    600,
-    .08,
-    "sine",
-    .04
-  );
+  beep(600,.08,"sine",.04);
 }
 
 
@@ -741,7 +619,6 @@ const road={
   lanesX:[],
 
   offset:0
-
 };
 
 
@@ -749,10 +626,8 @@ function buildRoad(){
 
   road.lanesX=[];
 
-  const laneWidth =
-    road.width/
-    road.lanes;
-
+  const laneWidth=
+    road.width/road.lanes;
 
   for(
     let i=0;
@@ -761,11 +636,9 @@ function buildRoad(){
   ){
 
     road.lanesX.push(
-
       road.x+
       laneWidth*i+
       laneWidth/2
-
     );
   }
 }
@@ -786,7 +659,6 @@ const player={
   width:46,
 
   height:78
-
 };
 
 
@@ -851,7 +723,7 @@ const state={
 
   slowTimer:0,
 
-  spawnTimer:1,
+  spawnTimer:.9,
 
   itemTimer:1.5,
 
@@ -866,7 +738,6 @@ const state={
   items:[],
 
   nearMissTimer:0
-
 };
 
 
@@ -892,90 +763,58 @@ try{
 
 
 /* =====================================================
-   HUD UPDATE
+   HUD
 ===================================================== */
 
 function updateHUD(){
 
-  if(
-    !Number.isFinite(
-      state.score
-    )
-  ){
+  state.score=
+    Number.isFinite(state.score)
+      ? state.score
+      : 0;
 
-    state.score=0;
-  }
+  state.coins=
+    Number.isFinite(state.coins)
+      ? state.coins
+      : 0;
 
-
-  if(
-    !Number.isFinite(
-      state.coins
-    )
-  ){
-
-    state.coins=0;
-  }
-
-
-  if(
-    !Number.isFinite(
-      state.fuel
-    )
-  ){
-
-    state.fuel=100;
-  }
-
+  state.fuel=
+    Number.isFinite(state.fuel)
+      ? state.fuel
+      : 100;
 
   scoreEl.textContent=
-    Math.floor(
-      state.score
-    );
-
+    Math.floor(state.score);
 
   coinsEl.textContent=
     state.coins;
 
-
   livesEl.textContent=
-    "❤️ "+
-    state.lives;
-
+    "❤️ "+state.lives;
 
   const fuelPercent=
     Math.max(
       0,
-      Math.min(
-        100,
-        state.fuel
-      )
+      Math.min(100,state.fuel)
     );
 
-
   fuelEl.textContent=
-    Math.floor(
-      fuelPercent
-    )+"%";
-
+    Math.floor(fuelPercent)+"%";
 
   fuelFill.style.width=
     fuelPercent+"%";
 
-
   if(fuelPercent>50){
 
-    fuelFill.style.background=
-      "#35d04f";
+    fuelFill.style.background="#35d04f";
 
   }else if(fuelPercent>25){
 
-    fuelFill.style.background=
-      "#ffd21f";
+    fuelFill.style.background="#ffd21f";
 
   }else{
 
-    fuelFill.style.background=
-      "#ff3333";
+    fuelFill.style.background="#ff3333";
   }
 }
 
@@ -987,50 +826,35 @@ function updateHUD(){
 function resetGame(){
 
   state.running=false;
-
   state.paused=false;
 
   state.score=0;
-
   state.coins=0;
-
   state.lives=3;
-
   state.fuel=100;
 
   state.roadSpeed=180;
-
   state.speedMultiplier=1;
 
   state.slowTimer=0;
-
   state.spawnTimer=.9;
-
   state.itemTimer=1.5;
 
   state.lastTime=0;
 
   state.invulnerable=0;
-
   state.flash=0;
 
   state.cars=[];
-
   state.items=[];
 
   state.nearMissTimer=0;
 
-
   player.lane=1;
-
-  player.x=
-    road.lanesX[1];
-
+  player.x=road.lanesX[1];
   player.y=650;
 
-
   road.offset=0;
-
 
   updateHUD();
 }
@@ -1059,7 +883,7 @@ function startGame(){
     "and fuel packs!";
 
   mainBtn.textContent=
-    "Start Game";
+    "Pause";
 
   overlay.style.display=
     "none";
@@ -1075,22 +899,14 @@ function startGame(){
 function gameOver(){
 
   state.running=false;
-
   state.paused=false;
 
-
   const finalScore=
-    Math.floor(
-      state.score
-    );
+    Math.floor(state.score);
 
+  if(finalScore>highScore){
 
-  if(
-    finalScore>highScore
-  ){
-
-    highScore=
-      finalScore;
+    highScore=finalScore;
 
     try{
 
@@ -1102,10 +918,8 @@ function gameOver(){
     }catch(error){}
   }
 
-
   title.textContent=
     "GAME OVER";
-
 
   message.innerHTML=
     "Score: "+
@@ -1115,21 +929,18 @@ function gameOver(){
     "<br>Best: "+
     highScore;
 
-
   mainBtn.textContent=
     "Play Again";
 
-
   overlay.style.display=
     "flex";
-
 
   updateHUD();
 }
 
 
 /* =====================================================
-   PLAYER MOVEMENT
+   MOVEMENT
 ===================================================== */
 
 function moveLeft(){
@@ -1137,20 +948,14 @@ function moveLeft(){
   if(
     !state.running ||
     state.paused
-  ){
-
-    return;
-  }
-
+  ) return;
 
   if(player.lane>0){
 
     player.lane--;
 
     player.x=
-      road.lanesX[
-        player.lane
-      ];
+      road.lanesX[player.lane];
   }
 }
 
@@ -1160,11 +965,7 @@ function moveRight(){
   if(
     !state.running ||
     state.paused
-  ){
-
-    return;
-  }
-
+  ) return;
 
   if(
     player.lane<
@@ -1174,9 +975,7 @@ function moveRight(){
     player.lane++;
 
     player.x=
-      road.lanesX[
-        player.lane
-      ];
+      road.lanesX[player.lane];
   }
 }
 
@@ -1195,10 +994,8 @@ window.addEventListener(
     ){
 
       e.preventDefault();
-
       moveLeft();
     }
-
 
     if(
       e.key==="ArrowRight" ||
@@ -1206,10 +1003,8 @@ window.addEventListener(
     ){
 
       e.preventDefault();
-
       moveRight();
     }
-
 
     if(
       e.key===" " ||
@@ -1218,7 +1013,10 @@ window.addEventListener(
 
       e.preventDefault();
 
-      togglePause();
+      if(state.running){
+
+        togglePause();
+      }
     }
 
   }
@@ -1226,7 +1024,7 @@ window.addEventListener(
 
 
 /* =====================================================
-   MOBILE BUTTONS
+   MOBILE CONTROLS
 ===================================================== */
 
 leftBtn.addEventListener(
@@ -1279,588 +1077,11 @@ mainBtn.addEventListener(
   }
 );
 
-
 /* =========================
    END P1
 ========================= *//* =====================================================
-   P2 / 4
-   ROAD + PLAYER + GAME STATE + DYNAMIC TRAFFIC
+   P2 - PAUSE + DYNAMIC TRAFFIC
 ===================================================== */
-
-
-/* =====================================================
-   ROAD
-===================================================== */
-
-const road = {
-
-  x: 35,
-
-  width: 350,
-
-  lanes: 3,
-
-  lanesX: [],
-
-  offset: 0
-
-};
-
-
-function buildRoad(){
-
-  road.lanesX = [];
-
-  const laneWidth =
-    road.width / road.lanes;
-
-
-  for(
-    let i = 0;
-    i < road.lanes;
-    i++
-  ){
-
-    road.lanesX.push(
-      road.x +
-      laneWidth * i +
-      laneWidth / 2
-    );
-  }
-}
-
-
-/* =====================================================
-   PLAYER
-===================================================== */
-
-const player = {
-
-  lane: 1,
-
-  x: 210,
-
-  y: 650,
-
-  width: 46,
-
-  height: 78
-
-};
-
-
-/* =====================================================
-   TRAFFIC TYPES
-===================================================== */
-
-const trafficTypes = [
-
-  {
-    name: "car",
-    w: 46,
-    h: 78,
-    speed: 180
-  },
-
-  {
-    name: "taxi",
-    w: 46,
-    h: 78,
-    speed: 165
-  },
-
-  {
-    name: "truck",
-    w: 52,
-    h: 92,
-    speed: 145
-  },
-
-  {
-    name: "bus",
-    w: 58,
-    h: 110,
-    speed: 125
-  }
-
-];
-
-
-/* =====================================================
-   GAME STATE
-===================================================== */
-
-const state = {
-
-  running: false,
-
-  paused: false,
-
-  score: 0,
-
-  coins: 0,
-
-  lives: 3,
-
-  fuel: 100,
-
-  roadSpeed: 180,
-
-  speedMultiplier: 1,
-
-  slowTimer: 0,
-
-  spawnTimer: 1,
-
-  itemTimer: 1.5,
-
-  lastTime: 0,
-
-  invulnerable: 0,
-
-  flash: 0,
-
-  cars: [],
-
-  items: [],
-
-  nearMissTimer: 0
-
-};
-
-
-/* =====================================================
-   HIGH SCORE
-===================================================== */
-
-let highScore = 0;
-
-try{
-
-  highScore =
-    Number(
-      localStorage.getItem(
-        "roadRushHighScore"
-      )
-    ) || 0;
-
-}catch(error){
-
-  highScore = 0;
-}
-
-
-/* =====================================================
-   HUD
-===================================================== */
-
-function updateHUD(){
-
-  if(
-    !Number.isFinite(
-      state.score
-    )
-  ){
-
-    state.score = 0;
-  }
-
-
-  if(
-    !Number.isFinite(
-      state.coins
-    )
-  ){
-
-    state.coins = 0;
-  }
-
-
-  if(
-    !Number.isFinite(
-      state.fuel
-    )
-  ){
-
-    state.fuel = 100;
-  }
-
-
-  scoreEl.textContent =
-    Math.floor(
-      state.score
-    );
-
-
-  coinsEl.textContent =
-    state.coins;
-
-
-  livesEl.textContent =
-    "❤️ " +
-    state.lives;
-
-
-  const fuelPercent =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        state.fuel
-      )
-    );
-
-
-  fuelEl.textContent =
-    Math.floor(
-      fuelPercent
-    ) + "%";
-
-
-  fuelFill.style.width =
-    fuelPercent + "%";
-
-
-  if(
-    fuelPercent > 50
-  ){
-
-    fuelFill.style.background =
-      "#35d04f";
-
-  }else if(
-    fuelPercent > 25
-  ){
-
-    fuelFill.style.background =
-      "#ffd21f";
-
-  }else{
-
-    fuelFill.style.background =
-      "#ff3333";
-  }
-}
-
-
-/* =====================================================
-   RESET GAME
-===================================================== */
-
-function resetGame(){
-
-  state.running = false;
-
-  state.paused = false;
-
-  state.score = 0;
-
-  state.coins = 0;
-
-  state.lives = 3;
-
-  state.fuel = 100;
-
-  state.roadSpeed = 180;
-
-  state.speedMultiplier = 1;
-
-  state.slowTimer = 0;
-
-  state.spawnTimer = .9;
-
-  state.itemTimer = 1.5;
-
-  state.lastTime = 0;
-
-  state.invulnerable = 0;
-
-  state.flash = 0;
-
-  state.cars = [];
-
-  state.items = [];
-
-  state.nearMissTimer = 0;
-
-
-  player.lane = 1;
-
-  player.x =
-    road.lanesX[1];
-
-  player.y = 650;
-
-
-  road.offset = 0;
-
-
-  /*
-    Start with a random traffic
-    pattern every new game.
-  */
-
-  buildTrafficPattern();
-
-
-  updateHUD();
-}
-
-
-/* =====================================================
-   START GAME
-===================================================== */
-
-function startGame(){
-
-  initAudio();
-
-  resetGame();
-
-  state.running = true;
-
-  state.lastTime =
-    performance.now();
-
-
-  title.textContent =
-    "ROAD RUSH";
-
-
-  message.innerHTML =
-    "Avoid traffic, collect coins<br>" +
-    "and fuel packs!";
-
-
-  mainBtn.textContent =
-    "Start Game";
-
-
-  overlay.style.display =
-    "none";
-
-
-  updateHUD();
-}
-
-
-/* =====================================================
-   GAME OVER
-===================================================== */
-
-function gameOver(){
-
-  state.running = false;
-
-  state.paused = false;
-
-
-  const finalScore =
-    Math.floor(
-      state.score
-    );
-
-
-  if(
-    finalScore > highScore
-  ){
-
-    highScore =
-      finalScore;
-
-
-    try{
-
-      localStorage.setItem(
-        "roadRushHighScore",
-        highScore
-      );
-
-    }catch(error){}
-  }
-
-
-  title.textContent =
-    "GAME OVER";
-
-
-  message.innerHTML =
-    "Score: " +
-    finalScore +
-    "<br>Coins: " +
-    state.coins +
-    "<br>Best: " +
-    highScore;
-
-
-  mainBtn.textContent =
-    "Play Again";
-
-
-  overlay.style.display =
-    "flex";
-
-
-  updateHUD();
-}
-
-
-/* =====================================================
-   PLAYER MOVEMENT
-===================================================== */
-
-function moveLeft(){
-
-  if(
-    !state.running ||
-    state.paused
-  ){
-
-    return;
-  }
-
-
-  if(
-    player.lane > 0
-  ){
-
-    player.lane--;
-
-    player.x =
-      road.lanesX[
-        player.lane
-      ];
-  }
-}
-
-
-function moveRight(){
-
-  if(
-    !state.running ||
-    state.paused
-  ){
-
-    return;
-  }
-
-
-  if(
-    player.lane <
-    road.lanes - 1
-  ){
-
-    player.lane++;
-
-    player.x =
-      road.lanesX[
-        player.lane
-      ];
-  }
-}
-
-
-/* =====================================================
-   KEYBOARD
-===================================================== */
-
-window.addEventListener(
-  "keydown",
-  function(e){
-
-    if(
-      e.key === "ArrowLeft" ||
-      e.key.toLowerCase() === "a"
-    ){
-
-      e.preventDefault();
-
-      moveLeft();
-    }
-
-
-    if(
-      e.key === "ArrowRight" ||
-      e.key.toLowerCase() === "d"
-    ){
-
-      e.preventDefault();
-
-      moveRight();
-    }
-
-
-    if(
-      e.key === " " ||
-      e.key.toLowerCase() === "p"
-    ){
-
-      e.preventDefault();
-
-      togglePause();
-    }
-
-  }
-);
-
-
-/* =====================================================
-   MOBILE BUTTONS
-===================================================== */
-
-leftBtn.addEventListener(
-  "pointerdown",
-  function(e){
-
-    e.preventDefault();
-
-    initAudio();
-
-    moveLeft();
-
-  },
-  { passive:false }
-);
-
-
-rightBtn.addEventListener(
-  "pointerdown",
-  function(e){
-
-    e.preventDefault();
-
-    initAudio();
-
-    moveRight();
-
-  },
-  { passive:false }
-);
-
-
-/* =====================================================
-   MAIN BUTTON
-===================================================== */
-
-mainBtn.addEventListener(
-  "click",
-  function(){
-
-    if(
-      !state.running
-    ){
-
-      startGame();
-
-    }else if(
-      state.paused
-    ){
-
-      resumeGame();
-    }
-
-  }
-);
 
 
 /* =====================================================
@@ -1869,17 +1090,10 @@ mainBtn.addEventListener(
 
 function togglePause(){
 
-  if(
-    !state.running
-  ){
-
+  if(!state.running)
     return;
-  }
 
-
-  if(
-    state.paused
-  ){
+  if(state.paused){
 
     resumeGame();
 
@@ -1895,33 +1109,25 @@ function pauseGame(){
   if(
     !state.running ||
     state.paused
-  ){
-
-    return;
-  }
-
+  ) return;
 
   initAudio();
 
-  state.paused = true;
+  state.paused=true;
 
   pauseSound();
 
-
-  title.textContent =
+  title.textContent=
     "PAUSED";
 
-
-  message.innerHTML =
-    "Use ◀ and ▶ to move<br>" +
+  message.innerHTML=
+    "Use ◀ and ▶ to move<br>"+
     "Tap Resume to continue";
 
-
-  mainBtn.textContent =
+  mainBtn.textContent=
     "Resume";
 
-
-  overlay.style.display =
+  overlay.style.display=
     "flex";
 }
 
@@ -1931,335 +1137,198 @@ function resumeGame(){
   if(
     !state.running ||
     !state.paused
-  ){
-
-    return;
-  }
-
+  ) return;
 
   initAudio();
 
-  state.paused = false;
+  state.paused=false;
 
-  state.lastTime =
+  state.lastTime=
     performance.now();
 
   resumeSound();
 
-
-  overlay.style.display =
+  overlay.style.display=
     "none";
 }
 
 
 /* =====================================================
-   DYNAMIC TRAFFIC SYSTEM
-===================================================== */
-
-
-/*
-   Traffic is allowed to use
-   ALL THREE LANES.
-
-   The system does NOT permanently
-   keep traffic on one side.
-
-   Instead, it creates changing
-   traffic patterns.
-*/
-
-
-let trafficPattern = [];
-
-let patternIndex = 0;
-
-let lastTrafficLane = -1;
-
-
-/* =====================================================
-   TRAFFIC PATTERNS
+   TRAFFIC PATTERN
 ===================================================== */
 
 /*
    0 = LEFT
    1 = CENTER
    2 = RIGHT
+
+   Traffic deliberately rotates between
+   all three lanes.
 */
 
+const trafficLanePattern=[
 
-function buildTrafficPattern(){
+  0,1,2,
+  1,2,0,
+  2,0,1,
+  0,2,1,
+  1,0,2,
+  2,1,0
 
-  const patterns = [
+];
 
-    [0, 1, 2, 1, 0, 2],
-
-    [2, 1, 0, 1, 2, 0],
-
-    [0, 2, 1, 0, 2, 1],
-
-    [1, 0, 2, 1, 2, 0],
-
-    [2, 0, 1, 2, 1, 0],
-
-    [1, 2, 0, 1, 0, 2]
-
-  ];
+let trafficPatternIndex=0;
 
 
-  const selected =
-    patterns[
-      Math.floor(
-        Math.random() *
-        patterns.length
-      )
-    ];
+/* =====================================================
+   DANGER AREA
+===================================================== */
 
+function isCarInDangerArea(car){
 
-  trafficPattern =
-    selected.slice();
+  const dangerTop=
+    player.y-250;
 
+  const dangerBottom=
+    player.y+
+    player.height+
+    110;
 
-  patternIndex = 0;
+  return(
+    car.y+car.height>dangerTop &&
+    car.y<dangerBottom
+  );
 }
 
 
 /* =====================================================
-   CHECK NEARBY CAR
+   GET BLOCKED LANES
 ===================================================== */
 
-function laneHasNearbyCar(
-  lane,
-  spawnY = -100
-){
+function getBlockedLanes(){
 
-  for(
-    const car of state.cars
-  ){
+  const blocked=[];
 
-    if(
-      car.lane !== lane
-    ){
+  for(let lane=0;lane<3;lane++){
 
+    for(const car of state.cars){
+
+      if(
+        car.lane===lane &&
+        isCarInDangerArea(car)
+      ){
+
+        blocked.push(lane);
+
+        break;
+      }
+    }
+  }
+
+  return blocked;
+}
+
+
+/* =====================================================
+   SAME-LANE SPAWN SAFETY
+===================================================== */
+
+function laneSafeForSpawn(lane){
+
+  const spawnY=-150;
+
+  for(const car of state.cars){
+
+    if(car.lane!==lane)
       continue;
-    }
 
+    const carBottom=
+      spawnY+
+      car.height;
 
-    const distance =
-      Math.abs(
-        car.y -
-        spawnY
-      );
-
+    const gap=
+      car.y-carBottom;
 
     if(
-      distance < 170
+      gap<150 &&
+      gap>-400
     ){
 
-      return true;
+      return false;
     }
   }
-
-
-  return false;
-}
-
-
-/* =====================================================
-   CHECK LANE AHEAD
-===================================================== */
-
-function laneBlockedAhead(
-  lane
-){
-
-  for(
-    const car of state.cars
-  ){
-
-    if(
-      car.lane !== lane
-    ){
-
-      continue;
-    }
-
-
-    /*
-      This is the important
-      danger area.
-
-      Cars far above or far
-      below the player don't
-      count as blocking the path.
-    */
-
-    if(
-
-      car.y > 80 &&
-
-      car.y <
-      player.y - 70
-
-    ){
-
-      return true;
-    }
-  }
-
-
-  return false;
-}
-
-
-/* =====================================================
-   GET SAFE LANES
-===================================================== */
-
-function getCurrentlySafeLanes(){
-
-  const safe = [];
-
-
-  for(
-    let lane = 0;
-    lane < road.lanes;
-    lane++
-  ){
-
-    if(
-      !laneBlockedAhead(lane)
-    ){
-
-      safe.push(lane);
-    }
-  }
-
-
-  return safe;
-}
-
-
-/* =====================================================
-   CAN SPAWN IN LANE
-===================================================== */
-
-function canSpawnInLane(
-  lane
-){
-
-  /*
-    Never spawn directly behind
-    another car.
-  */
-
-  if(
-    laneHasNearbyCar(
-      lane,
-      -100
-    )
-  ){
-
-    return false;
-  }
-
-
-  /*
-    Count the other lanes that
-    are already blocked ahead.
-  */
-
-  let otherBlocked = 0;
-
-
-  for(
-    let other = 0;
-    other < road.lanes;
-    other++
-  ){
-
-    if(
-      other === lane
-    ){
-
-      continue;
-    }
-
-
-    if(
-      laneBlockedAhead(other)
-    ){
-
-      otherBlocked++;
-    }
-  }
-
-
-  /*
-    If two other lanes are already
-    blocked, this lane MUST remain
-    free.
-
-    Therefore:
-       🚗 | 🚕 | 🚙
-    can never be deliberately
-    created in the danger area.
-  */
-
-  if(
-    otherBlocked >= 2
-  ){
-
-    return false;
-  }
-
 
   return true;
 }
 
 
 /* =====================================================
-   GET NEXT TRAFFIC LANE
+   CHOOSE TRAFFIC LANE
 ===================================================== */
 
-function getNextTrafficLane(){
+function chooseTrafficLane(){
 
-  if(
-    trafficPattern.length === 0 ||
-    patternIndex >=
-    trafficPattern.length
-  ){
+  const blocked=
+    getBlockedLanes();
 
-    buildTrafficPattern();
+
+  /*
+     We MUST always leave at least
+     one safe lane.
+
+     If two lanes are already blocked,
+     the new car may only be placed
+     in one of those existing lanes,
+     provided there is enough space.
+  */
+
+  if(blocked.length>=2){
+
+    const candidates=
+      blocked.filter(
+        lane =>
+          laneSafeForSpawn(lane)
+      );
+
+    if(candidates.length>0){
+
+      return candidates[
+        Math.floor(
+          Math.random()*
+          candidates.length
+        )
+      ];
+    }
+
+    return -1;
   }
 
 
   /*
-    First try the planned
-    traffic pattern.
+     Normal case.
+
+     Follow the lane pattern but skip
+     a lane if it is unsafe to spawn.
   */
 
   for(
-    let attempt = 0;
-    attempt < 3;
+    let attempt=0;
+    attempt<6;
     attempt++
   ){
 
-    const lane =
-      trafficPattern[
-        patternIndex %
-        trafficPattern.length
+    const lane=
+      trafficLanePattern[
+        trafficPatternIndex%
+        trafficLanePattern.length
       ];
 
-
-    patternIndex++;
+    trafficPatternIndex++;
 
 
     if(
-      canSpawnInLane(lane)
+      laneSafeForSpawn(lane)
     ){
-
-      lastTrafficLane =
-        lane;
 
       return lane;
     }
@@ -2267,166 +1336,36 @@ function getNextTrafficLane(){
 
 
   /*
-    If the planned lane is not
-    available, try the other lanes.
+     Fallback.
   */
 
-  const safe =
-    getCurrentlySafeLanes();
-
-
-  /*
-    Prefer a lane different
-    from the previous lane.
-
-    This makes traffic actually
-    move between sides.
-  */
-
-  const different =
-    safe.filter(
-      lane =>
-        lane !==
-        lastTrafficLane
-    );
-
-
-  if(
-    different.length > 0
-  ){
-
-    const lane =
-      different[
-        Math.floor(
-          Math.random() *
-          different.length
-        )
-      ];
-
-
-    lastTrafficLane =
-      lane;
-
-
-    return lane;
-  }
-
-
-  if(
-    safe.length > 0
-  ){
-
-    const lane =
-      safe[
-        Math.floor(
-          Math.random() *
-          safe.length
-        )
-      ];
-
-
-    lastTrafficLane =
-      lane;
-
-
-    return lane;
-  }
-
-
-  /*
-    No safe spawn right now.
-  */
-
-  return -1;
-}
-
-
-/* =====================================================
-   PREVENT SAME-LANE OVERLAP
-===================================================== */
-
-function preventTrafficOverlap(){
+  const available=[];
 
   for(
-    let lane = 0;
-    lane < road.lanes;
+    let lane=0;
+    lane<3;
     lane++
   ){
 
-    const cars =
-      state.cars
-        .filter(
-          car =>
-            car.lane === lane
-        )
-        .sort(
-          (a,b) =>
-            a.y - b.y
-        );
-
-
-    /*
-      Cars with smaller Y are
-      further ahead.
-    */
-
-    for(
-      let i = 1;
-      i < cars.length;
-      i++
+    if(
+      laneSafeForSpawn(lane)
     ){
 
-      const front =
-        cars[i - 1];
-
-      const back =
-        cars[i];
-
-
-      /*
-        Calculate a gap using
-        BOTH vehicle sizes.
-
-        This fixes truck/bus/car
-        overlap problems.
-      */
-
-      const minimumGap =
-        (
-          front.height +
-          back.height
-        ) / 2 +
-        22;
-
-
-      if(
-        back.y -
-        front.y <
-        minimumGap
-      ){
-
-        back.y =
-          front.y +
-          minimumGap;
-      }
-
-
-      /*
-        A faster vehicle cannot
-        drive through a slower
-        vehicle.
-      */
-
-      if(
-        back.speed >
-        front.speed
-      ){
-
-        back.speed =
-          front.speed;
-      }
+      available.push(lane);
     }
   }
+
+
+  if(available.length===0)
+    return -1;
+
+
+  return available[
+    Math.floor(
+      Math.random()*
+      available.length
+    )
+  ];
 }
 
 
@@ -2436,137 +1375,163 @@ function preventTrafficOverlap(){
 
 function createTraffic(){
 
-  const lane =
-    getNextTrafficLane();
+  const lane=
+    chooseTrafficLane();
 
-
-  /*
-    No safe lane available.
-    Do NOT create an impossible
-    traffic situation.
-  */
-
-  if(
-    lane === -1
-  ){
-
+  if(lane===-1)
     return false;
-  }
 
 
-  const type =
+  const type=
     trafficTypes[
       Math.floor(
-        Math.random() *
+        Math.random()*
         trafficTypes.length
       )
     ];
 
 
-  const car = {
+  const car={
 
-    type: type.name,
+    type:type.name,
 
-    lane: lane,
+    lane:lane,
 
     x:
       road.lanesX[lane],
 
     y:
-      -type.h - 50,
+      -type.h-60,
 
-    width:
-      type.w,
+    width:type.w,
 
-    height:
-      type.h,
+    height:type.h,
 
     speed:
-      type.speed *
+      type.speed*
       (
-        .92 +
-        Math.random() * .10
+        .92+
+        Math.random()*.12
       ),
 
-    nearMiss: false
-
+    nearMiss:false
   };
 
 
-  state.cars.push(
-    car
-  );
-
-
-  preventTrafficOverlap();
-
+  state.cars.push(car);
 
   return true;
 }
 
 
 /* =====================================================
-   SPAWN TRAFFIC
+   TRAFFIC SPAWNING
 ===================================================== */
 
 function spawnCars(dt){
 
-  state.spawnTimer -= dt;
-
+  state.spawnTimer-=dt;
 
   if(
-    state.spawnTimer > 0
+    state.spawnTimer>0
   ){
 
     return;
   }
 
 
-  /*
-    Gradual difficulty.
-  */
-
-  const difficulty =
-    Math.min(
-      state.score / 3500,
-      .35
-    );
-
-
-  const spawned =
+  const spawned=
     createTraffic();
 
 
-  if(
-    spawned
-  ){
+  if(spawned){
 
     /*
-      Variable spawn interval.
-
-      This makes traffic appear
-      at different times rather
-      than as a fixed repeating
-      pattern.
+       Keeps traffic reasonably spaced.
     */
 
-    state.spawnTimer =
+    const difficulty=
+      Math.min(
+        state.score/5000,
+        .20
+      );
+
+    state.spawnTimer=
       Math.max(
-        .65,
-        1.20 -
-        difficulty +
-        Math.random() * .35
+        .72,
+        1.10-difficulty
       );
 
   }else{
 
-    /*
-      If there is no safe path,
-      wait and try again.
-    */
+    state.spawnTimer=.18;
+  }
+}
 
-    state.spawnTimer =
-      .25;
+
+/* =====================================================
+   SAME-LANE OVERLAP PROTECTION
+===================================================== */
+
+function preventTrafficOverlap(){
+
+  for(
+    let lane=0;
+    lane<3;
+    lane++
+  ){
+
+    const cars=
+      state.cars
+        .filter(
+          car =>
+            car.lane===lane
+        )
+        .sort(
+          (a,b)=>
+            a.y-b.y
+        );
+
+
+    for(
+      let i=1;
+      i<cars.length;
+      i++
+    ){
+
+      const front=
+        cars[i-1];
+
+      const back=
+        cars[i];
+
+
+      const minimumGap=
+        front.height+
+        25;
+
+
+      if(
+        back.y<
+        front.y+
+        minimumGap
+      ){
+
+        back.y=
+          front.y+
+          minimumGap;
+      }
+
+
+      if(
+        back.speed>
+        front.speed
+      ){
+
+        back.speed=
+          front.speed;
+      }
+    }
   }
 }
 
@@ -2578,66 +1543,48 @@ function spawnCars(dt){
 function updateCars(dt){
 
   for(
-    let i =
-      state.cars.length - 1;
+    let i=
+      state.cars.length-1;
 
-    i >= 0;
+    i>=0;
 
     i--
   ){
 
-    const car =
+    const car=
       state.cars[i];
 
 
-    /*
-      Repair invalid position.
-    */
-
     if(
-      !Number.isFinite(
-        car.y
-      )
+      !Number.isFinite(car.y)
     ){
 
-      car.y =
-        -car.height - 50;
+      car.y=
+        -car.height-60;
     }
 
 
-    /*
-      Repair invalid speed.
-    */
-
     if(
-      !Number.isFinite(
-        car.speed
-      ) ||
-      car.speed <= 0
+      !Number.isFinite(car.speed) ||
+      car.speed<=0
     ){
 
-      const type =
+      const type=
         trafficTypes.find(
           t =>
-            t.name ===
-            car.type
+            t.name===car.type
         );
 
-
-      car.speed =
+      car.speed=
         type
           ? type.speed
           : 150;
     }
 
 
-    /*
-      Move.
-    */
-
-    car.y +=
-      car.speed *
-      state.speedMultiplier *
+    car.y+=
+      car.speed*
+      state.speedMultiplier*
       dt;
 
 
@@ -2646,50 +1593,43 @@ function updateCars(dt){
     ================================================= */
 
     if(
-
       !car.nearMiss &&
 
-      car.y >
-      player.y - 35 &&
+      car.y>
+        player.y-35 &&
 
-      car.y <
-      player.y +
-      player.height +
-      35
-
+      car.y<
+        player.y+
+        player.height+
+        35
     ){
 
-      const horizontal =
+      const horizontal=
         Math.abs(
-          car.x -
-          player.x
+          car.x-player.x
         );
 
 
-      const safeDistance =
+      const safeDistance=
         (
-          car.width +
+          car.width+
           player.width
-        ) / 2;
+        )/2;
 
 
       if(
+        horizontal>
+          safeDistance &&
 
-        horizontal >
-        safeDistance &&
-
-        horizontal <
-        safeDistance + 25
-
+        horizontal<
+          safeDistance+25
       ){
 
-        car.nearMiss = true;
+        car.nearMiss=true;
 
-        state.score += 15;
+        state.score+=15;
 
-        state.nearMissTimer =
-          .7;
-
+        state.nearMissTimer=.7;
 
         beep(
           1000,
@@ -2702,30 +1642,22 @@ function updateCars(dt){
 
 
     /* =================================================
-       REMOVE OFF SCREEN
+       REMOVE
     ================================================= */
 
     if(
-      car.y >
-      canvas.height +
-      car.height +
+      car.y>
+      canvas.height+
+      car.height+
       40
     ){
 
-      state.cars.splice(
-        i,
-        1
-      );
+      state.cars.splice(i,1);
 
-
-      state.score += 5;
+      state.score+=5;
     }
   }
 
-
-  /*
-    Final overlap protection.
-  */
 
   preventTrafficOverlap();
 }
@@ -2738,62 +1670,56 @@ function updateCars(dt){
 function checkCollisions(){
 
   if(
-    state.invulnerable > 0
+    state.invulnerable>0
   ){
 
     return;
   }
 
 
-  const playerLeft =
-    player.x -
-    player.width / 2;
+  const playerLeft=
+    player.x-
+    player.width/2;
 
-  const playerRight =
-    player.x +
-    player.width / 2;
+  const playerRight=
+    player.x+
+    player.width/2;
 
-  const playerTop =
+  const playerTop=
     player.y;
 
-  const playerBottom =
-    player.y +
+  const playerBottom=
+    player.y+
     player.height;
 
 
-  for(
-    const car of state.cars
-  ){
+  for(const car of state.cars){
 
-    const carLeft =
-      car.x -
-      car.width / 2;
+    const carLeft=
+      car.x-
+      car.width/2;
 
-    const carRight =
-      car.x +
-      car.width / 2;
+    const carRight=
+      car.x+
+      car.width/2;
 
-    const carTop =
+    const carTop=
       car.y;
 
-    const carBottom =
-      car.y +
+    const carBottom=
+      car.y+
       car.height;
 
 
     if(
 
-      playerLeft <
-      carRight &&
+      playerLeft<carRight &&
 
-      playerRight >
-      carLeft &&
+      playerRight>carLeft &&
 
-      playerTop <
-      carBottom &&
+      playerTop<carBottom &&
 
-      playerBottom >
-      carTop
+      playerBottom>carTop
 
     ){
 
@@ -2806,51 +1732,54 @@ function checkCollisions(){
 
 
 /* =====================================================
-   PLAYER CRASH
+   CRASH
 ===================================================== */
 
 function crashPlayer(){
 
+  if(
+    state.invulnerable>0
+  ){
+
+    return;
+  }
+
+
   state.lives--;
 
-  state.invulnerable =
-    1.5;
+  state.invulnerable=1.5;
 
-  state.flash =
-    .35;
-
+  state.flash=.35;
 
   crashSound();
 
 
   /*
-    Remove cars close to
-    the player so the player
-    gets a chance to recover.
+     Remove cars close to the player.
   */
 
-  state.cars =
+  state.cars=
     state.cars.filter(
       car =>
         Math.abs(
-          car.y -
-          player.y
-        ) > 180
+          car.y-player.y
+        )>180
     );
 
 
   /*
-    Return player to center.
+     Reset player to center lane
+     after a crash.
   */
 
-  player.lane = 1;
+  player.lane=1;
 
-  player.x =
+  player.x=
     road.lanesX[1];
 
 
   if(
-    state.lives <= 0
+    state.lives<=0
   ){
 
     gameOver();
@@ -2863,15 +1792,15 @@ function crashPlayer(){
 }
 
 
-/* =====================================================
-   END OF P2
-===================================================== *//* =====================================================
+/* =========================
+   END P2
+========================= *//* =====================================================
    P3 - ITEMS + DRAWING
 ===================================================== */
 
 
 /* =====================================================
-   ITEMS
+   CREATE ITEM
 ===================================================== */
 
 function createItem(){
@@ -2915,7 +1844,6 @@ function createItem(){
     speed:
       125+
       Math.random()*30
-
   });
 }
 
@@ -2928,13 +1856,11 @@ function spawnItems(dt){
 
   state.itemTimer-=dt;
 
-
   if(
     state.itemTimer<=0
   ){
 
     createItem();
-
 
     state.itemTimer=
       2+
@@ -2962,33 +1888,22 @@ function updateItems(dt){
       state.items[i];
 
 
-    item.y +=
+    item.y+=
       item.speed*
       state.speedMultiplier*
       dt;
 
-
-    /*
-      Remove off-screen.
-    */
 
     if(
       item.y>
       canvas.height+50
     ){
 
-      state.items.splice(
-        i,
-        1
-      );
+      state.items.splice(i,1);
 
       continue;
     }
 
-
-    /*
-      Player center.
-    */
 
     const playerCenterY=
       player.y+
@@ -2997,21 +1912,15 @@ function updateItems(dt){
 
     const dx=
       Math.abs(
-        player.x-
-        item.x
+        player.x-item.x
       );
 
 
     const dy=
       Math.abs(
-        playerCenterY-
-        item.y
+        playerCenterY-item.y
       );
 
-
-    /*
-      Collect.
-    */
 
     if(
 
@@ -3027,11 +1936,7 @@ function updateItems(dt){
 
       collectItem(item);
 
-
-      state.items.splice(
-        i,
-        1
-      );
+      state.items.splice(i,1);
     }
   }
 }
@@ -3052,15 +1957,12 @@ function collectItem(item){
     state.score+=25;
 
     coinSound();
-  }
 
-
-  else if(
+  }else if(
     item.type==="fuel"
   ){
 
     state.fuel+=25;
-
 
     if(
       state.fuel>100
@@ -3069,22 +1971,17 @@ function collectItem(item){
       state.fuel=100;
     }
 
-
     state.score+=10;
 
     fuelSound();
-  }
 
-
-  else if(
+  }else if(
     item.type==="slow"
   ){
 
-    state.speedMultiplier=
-      .55;
+    state.speedMultiplier=.55;
 
-    state.slowTimer=
-      5;
+    state.slowTimer=5;
 
     state.score+=15;
 
@@ -3110,12 +2007,8 @@ function updatePlayer(){
   }
 
 
-  if(
-    player.lane<0
-  ){
-
+  if(player.lane<0)
     player.lane=0;
-  }
 
 
   if(
@@ -3129,9 +2022,7 @@ function updatePlayer(){
 
 
   player.x=
-    road.lanesX[
-      player.lane
-    ];
+    road.lanesX[player.lane];
 }
 
 
@@ -3140,10 +2031,6 @@ function updatePlayer(){
 ===================================================== */
 
 function drawBackground(){
-
-  /*
-    Grass.
-  */
 
   ctx.fillStyle=
     "#217a32";
@@ -3155,10 +2042,6 @@ function drawBackground(){
     canvas.height
   );
 
-
-  /*
-    Grass details.
-  */
 
   ctx.fillStyle=
     "#1d6d2c";
@@ -3178,7 +2061,6 @@ function drawBackground(){
       3
     );
 
-
     ctx.fillRect(
       canvas.width-18,
       y+
@@ -3189,10 +2071,6 @@ function drawBackground(){
     );
   }
 
-
-  /*
-    Road.
-  */
 
   ctx.fillStyle=
     "#303030";
@@ -3205,13 +2083,8 @@ function drawBackground(){
   );
 
 
-  /*
-    Road edges.
-  */
-
   ctx.fillStyle=
     "#eeeeee";
-
 
   ctx.fillRect(
     road.x,
@@ -3219,7 +2092,6 @@ function drawBackground(){
     5,
     canvas.height
   );
-
 
   ctx.fillRect(
     road.x+
@@ -3231,21 +2103,14 @@ function drawBackground(){
   );
 
 
-  /*
-    Lane lines.
-  */
-
   ctx.fillStyle=
     "#ffffff";
 
 
   const dashHeight=45;
-
   const gap=35;
-
   const total=
-    dashHeight+
-    gap;
+    dashHeight+gap;
 
 
   for(
@@ -3259,8 +2124,7 @@ function drawBackground(){
       (
         road.width/
         road.lanes
-      )*
-      lane;
+      )*lane;
 
 
     for(
@@ -3285,74 +2149,45 @@ function drawBackground(){
 
 
 /* =====================================================
-   DRAW TRAFFIC CAR
+   DRAW TRAFFIC
 ===================================================== */
 
 function drawCar(car){
 
-  const x=
-    car.x;
-
-  const y=
-    car.y;
-
-  const w=
-    car.width;
-
-  const h=
-    car.height;
+  const x=car.x;
+  const y=car.y;
+  const w=car.width;
+  const h=car.height;
 
 
   ctx.save();
 
+  ctx.translate(x,y);
 
-  ctx.translate(
-    x,
-    y
-  );
-
-
-  /*
-    Body colour.
-  */
 
   if(
     car.type==="taxi"
   ){
 
-    ctx.fillStyle=
-      "#f4c542";
+    ctx.fillStyle="#f4c542";
 
-  }
-
-  else if(
+  }else if(
     car.type==="truck"
   ){
 
-    ctx.fillStyle=
-      "#3d7eff";
+    ctx.fillStyle="#3d7eff";
 
-  }
-
-  else if(
+  }else if(
     car.type==="bus"
   ){
 
-    ctx.fillStyle=
-      "#e65b5b";
+    ctx.fillStyle="#e65b5b";
 
+  }else{
+
+    ctx.fillStyle="#e53935";
   }
 
-  else{
-
-    ctx.fillStyle=
-      "#e53935";
-  }
-
-
-  /*
-    Main body.
-  */
 
   ctx.fillRect(
     -w/2,
@@ -3361,10 +2196,6 @@ function drawCar(car){
     h
   );
 
-
-  /*
-    Windows.
-  */
 
   ctx.fillStyle=
     "#b9e6ff";
@@ -3381,7 +2212,6 @@ function drawCar(car){
       18
     );
 
-
     ctx.fillRect(
       -w/2+6,
       32,
@@ -3389,10 +2219,7 @@ function drawCar(car){
       18
     );
 
-
-    if(
-      h>70
-    ){
+    if(h>70){
 
       ctx.fillRect(
         -w/2+6,
@@ -3413,12 +2240,7 @@ function drawCar(car){
   }
 
 
-  /*
-    Wheels.
-  */
-
-  ctx.fillStyle=
-    "#111";
+  ctx.fillStyle="#111";
 
 
   ctx.fillRect(
@@ -3428,14 +2250,12 @@ function drawCar(car){
     18
   );
 
-
   ctx.fillRect(
     w/2-3,
     12,
     6,
     18
   );
-
 
   ctx.fillRect(
     -w/2-3,
@@ -3444,7 +2264,6 @@ function drawCar(car){
     18
   );
 
-
   ctx.fillRect(
     w/2-3,
     h-30,
@@ -3453,12 +2272,7 @@ function drawCar(car){
   );
 
 
-  /*
-    Headlights.
-  */
-
-  ctx.fillStyle=
-    "#fff6a0";
+  ctx.fillStyle="#fff6a0";
 
 
   ctx.fillRect(
@@ -3468,7 +2282,6 @@ function drawCar(car){
     5
   );
 
-
   ctx.fillRect(
     w/2-13,
     2,
@@ -3477,16 +2290,11 @@ function drawCar(car){
   );
 
 
-  /*
-    Truck detail.
-  */
-
   if(
     car.type==="truck"
   ){
 
-    ctx.strokeStyle=
-      "#ffffff";
+    ctx.strokeStyle="#ffffff";
 
     ctx.lineWidth=2;
 
@@ -3498,10 +2306,6 @@ function drawCar(car){
     );
   }
 
-
-  /*
-    Bus detail.
-  */
 
   if(
     car.type==="bus"
@@ -3531,16 +2335,11 @@ function drawPlayer(){
 
   ctx.save();
 
-
   ctx.translate(
     player.x,
     player.y
   );
 
-
-  /*
-    Crash flashing.
-  */
 
   if(
     state.invulnerable>0 &&
@@ -3549,14 +2348,9 @@ function drawPlayer(){
     )%2===0
   ){
 
-    ctx.globalAlpha=
-      .35;
+    ctx.globalAlpha=.35;
   }
 
-
-  /*
-    Player body.
-  */
 
   ctx.fillStyle=
     "#00bfff";
@@ -3569,10 +2363,6 @@ function drawPlayer(){
   );
 
 
-  /*
-    Roof.
-  */
-
   ctx.fillStyle=
     "#0b4f8a";
 
@@ -3583,10 +2373,6 @@ function drawPlayer(){
     32
   );
 
-
-  /*
-    Window.
-  */
 
   ctx.fillStyle=
     "#bdeaff";
@@ -3599,12 +2385,7 @@ function drawPlayer(){
   );
 
 
-  /*
-    Wheels.
-  */
-
-  ctx.fillStyle=
-    "#111";
+  ctx.fillStyle="#111";
 
 
   ctx.fillRect(
@@ -3614,14 +2395,12 @@ function drawPlayer(){
     20
   );
 
-
   ctx.fillRect(
     player.width/2-3,
     12,
     6,
     20
   );
-
 
   ctx.fillRect(
     -player.width/2-3,
@@ -3630,7 +2409,6 @@ function drawPlayer(){
     20
   );
 
-
   ctx.fillRect(
     player.width/2-3,
     player.height-32,
@@ -3639,12 +2417,7 @@ function drawPlayer(){
   );
 
 
-  /*
-    Headlights.
-  */
-
-  ctx.fillStyle=
-    "#ffffaa";
+  ctx.fillStyle="#ffffaa";
 
 
   ctx.fillRect(
@@ -3654,7 +2427,6 @@ function drawPlayer(){
     6
   );
 
-
   ctx.fillRect(
     6,
     2,
@@ -3663,13 +2435,8 @@ function drawPlayer(){
   );
 
 
-  /*
-    Center stripe.
-  */
-
   ctx.fillStyle=
     "rgba(255,255,255,.25)";
-
 
   ctx.fillRect(
     -2,
@@ -3691,16 +2458,11 @@ function drawItem(item){
 
   ctx.save();
 
-
   ctx.translate(
     item.x,
     item.y
   );
 
-
-  /*
-    COIN
-  */
 
   if(
     item.type==="coin"
@@ -3716,52 +2478,25 @@ function drawItem(item){
       Math.PI*2
     );
 
-
-    ctx.fillStyle=
-      "#ffd700";
-
+    ctx.fillStyle="#ffd700";
     ctx.fill();
 
-
-    ctx.strokeStyle=
-      "#fff2a0";
-
+    ctx.strokeStyle="#fff2a0";
     ctx.lineWidth=3;
-
     ctx.stroke();
 
+    ctx.fillStyle="#9b6b00";
+    ctx.font="bold 15px Arial";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
 
-    ctx.fillStyle=
-      "#9b6b00";
+    ctx.fillText("$",0,1);
 
-    ctx.font=
-      "bold 15px Arial";
-
-    ctx.textAlign=
-      "center";
-
-    ctx.textBaseline=
-      "middle";
-
-    ctx.fillText(
-      "$",
-      0,
-      1
-    );
-  }
-
-
-  /*
-    FUEL
-  */
-
-  else if(
+  }else if(
     item.type==="fuel"
   ){
 
-    ctx.fillStyle=
-      "#ff7b00";
-
+    ctx.fillStyle="#ff7b00";
 
     ctx.fillRect(
       -10,
@@ -3770,10 +2505,7 @@ function drawItem(item){
       28
     );
 
-
-    ctx.fillStyle=
-      "#ffffff";
-
+    ctx.fillStyle="#ffffff";
 
     ctx.fillRect(
       -6,
@@ -3782,10 +2514,7 @@ function drawItem(item){
       10
     );
 
-
-    ctx.fillStyle=
-      "#ff3333";
-
+    ctx.fillStyle="#ff3333";
 
     ctx.fillRect(
       10,
@@ -3793,16 +2522,8 @@ function drawItem(item){
       8,
       5
     );
-  }
 
-
-  /*
-    SPEED REDUCER
-  */
-
-  else if(
-    item.type==="slow"
-  ){
+  }else{
 
     ctx.beginPath();
 
@@ -3814,38 +2535,19 @@ function drawItem(item){
       Math.PI*2
     );
 
-
-    ctx.fillStyle=
-      "#9b59ff";
-
+    ctx.fillStyle="#9b59ff";
     ctx.fill();
 
-
-    ctx.strokeStyle=
-      "#ffffff";
-
+    ctx.strokeStyle="#ffffff";
     ctx.lineWidth=2;
-
     ctx.stroke();
 
+    ctx.fillStyle="#ffffff";
+    ctx.font="bold 13px Arial";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
 
-    ctx.fillStyle=
-      "#ffffff";
-
-    ctx.font=
-      "bold 13px Arial";
-
-    ctx.textAlign=
-      "center";
-
-    ctx.textBaseline=
-      "middle";
-
-    ctx.fillText(
-      "S",
-      0,
-      1
-    );
+    ctx.fillText("S",0,1);
   }
 
 
@@ -3882,7 +2584,7 @@ function drawItems(){
 /* =========================
    END P3
 ========================= *//* =====================================================
-   P4 - GAME LOOP + PAUSE + FINAL SETUP
+   P4 - GAME LOOP + FINAL SETUP
 ===================================================== */
 
 
@@ -3902,6 +2604,11 @@ canvas.addEventListener(
       return;
     }
 
+
+    /*
+       Don't pause when the user taps
+       near the bottom controls.
+    */
 
     const rect=
       canvas.getBoundingClientRect();
@@ -3928,12 +2635,6 @@ canvas.addEventListener(
         rect.height
       );
 
-
-    /*
-      Center area.
-
-      Tapping here pauses.
-    */
 
     const centerWidth=
       canvas.width*.45;
@@ -3986,10 +2687,6 @@ canvas.addEventListener(
 
 function draw(){
 
-  /*
-    Clear.
-  */
-
   ctx.clearRect(
     0,
     0,
@@ -3998,36 +2695,17 @@ function draw(){
   );
 
 
-  /*
-    Road.
-  */
-
   drawBackground();
-
-
-  /*
-    Items.
-  */
 
   drawItems();
 
-
-  /*
-    Traffic.
-  */
-
   drawTraffic();
-
-
-  /*
-    Player.
-  */
 
   drawPlayer();
 
 
   /* =================================================
-     SLOW MODE INDICATOR
+     SLOW MODE
   ================================================= */
 
   if(
@@ -4037,7 +2715,6 @@ function draw(){
     ctx.fillStyle=
       "rgba(155,89,255,.10)";
 
-
     ctx.fillRect(
       0,
       0,
@@ -4046,17 +2723,12 @@ function draw(){
     );
 
 
-    ctx.fillStyle=
-      "#ffffff";
-
+    ctx.fillStyle="#ffffff";
 
     ctx.font=
       "bold 16px Arial";
 
-
-    ctx.textAlign=
-      "center";
-
+    ctx.textAlign="center";
 
     ctx.fillText(
       "SLOW MODE",
@@ -4074,17 +2746,12 @@ function draw(){
     state.nearMissTimer>0
   ){
 
-    ctx.fillStyle=
-      "#ffe600";
-
+    ctx.fillStyle="#ffe600";
 
     ctx.font=
       "bold 20px Arial";
 
-
-    ctx.textAlign=
-      "center";
-
+    ctx.textAlign="center";
 
     ctx.fillText(
       "NICE!",
@@ -4104,7 +2771,6 @@ function draw(){
 
     ctx.fillStyle=
       "rgba(255,0,0,.18)";
-
 
     ctx.fillRect(
       0,
@@ -4126,7 +2792,6 @@ function draw(){
     ctx.fillStyle=
       "rgba(0,0,0,.35)";
 
-
     ctx.fillRect(
       0,
       0,
@@ -4135,16 +2800,12 @@ function draw(){
     );
 
 
-    ctx.fillStyle=
-      "#ffffff";
-
+    ctx.fillStyle="#ffffff";
 
     ctx.font=
       "bold 28px Arial";
 
-
-    ctx.textAlign=
-      "center";
+    ctx.textAlign="center";
 
 
     ctx.fillText(
@@ -4154,8 +2815,7 @@ function draw(){
     );
 
 
-    ctx.font=
-      "16px Arial";
+    ctx.font="16px Arial";
 
 
     ctx.fillText(
@@ -4165,8 +2825,7 @@ function draw(){
     );
 
 
-    ctx.font=
-      "14px Arial";
+    ctx.font="14px Arial";
 
 
     ctx.fillText(
@@ -4204,12 +2863,9 @@ function animate(timestamp){
     timestamp;
 
 
-  /*
-    Safety.
-  */
-
   if(
-    !Number.isFinite(dt)
+    !Number.isFinite(dt) ||
+    dt<0
   ){
 
     dt=0;
@@ -4217,18 +2873,16 @@ function animate(timestamp){
 
 
   /*
-    Prevent huge jumps when
-    returning to the game.
+     Prevent large jumps.
   */
 
   if(dt>.05){
-
     dt=.05;
   }
 
 
   /* =================================================
-     GAME UPDATE
+     UPDATE
   ================================================= */
 
   if(
@@ -4236,9 +2890,9 @@ function animate(timestamp){
     !state.paused
   ){
 
-    /*
-      Fuel.
-    */
+    /* =====================
+       FUEL
+    ===================== */
 
     state.fuel-=
       dt*1.8;
@@ -4252,9 +2906,9 @@ function animate(timestamp){
     }
 
 
-    /*
-      Slow timer.
-    */
+    /* =====================
+       SLOW TIMER
+    ===================== */
 
     if(
       state.slowTimer>0
@@ -4274,45 +2928,66 @@ function animate(timestamp){
     }
 
 
-    /*
-      Invulnerability.
-    */
+    /* =====================
+       INVULNERABILITY
+    ===================== */
 
     if(
       state.invulnerable>0
     ){
 
       state.invulnerable-=dt;
+
+      if(
+        state.invulnerable<0
+      ){
+
+        state.invulnerable=0;
+      }
     }
 
 
-    /*
-      Crash flash.
-    */
+    /* =====================
+       FLASH
+    ===================== */
 
     if(
       state.flash>0
     ){
 
       state.flash-=dt;
+
+      if(
+        state.flash<0
+      ){
+
+        state.flash=0;
+      }
     }
 
 
-    /*
-      Near miss text.
-    */
+    /* =====================
+       NEAR MISS
+    ===================== */
 
     if(
       state.nearMissTimer>0
     ){
 
       state.nearMissTimer-=dt;
+
+      if(
+        state.nearMissTimer<0
+      ){
+
+        state.nearMissTimer=0;
+      }
     }
 
 
-    /*
-      Road movement.
-    */
+    /* =====================
+       ROAD
+    ===================== */
 
     road.offset+=
       state.roadSpeed*
@@ -4324,18 +2999,16 @@ function animate(timestamp){
 
 
     if(
-      road.offset>=
-      dashTotal
+      road.offset>=dashTotal
     ){
 
-      road.offset-=
-        dashTotal;
+      road.offset-=dashTotal;
     }
 
 
-    /*
-      Score increases while driving.
-    */
+    /* =====================
+       SCORE
+    ===================== */
 
     state.score+=
       dt*
@@ -4343,33 +3016,44 @@ function animate(timestamp){
       state.speedMultiplier;
 
 
-    /*
-      Spawn and update.
-    */
+    /* =====================
+       TRAFFIC
+    ===================== */
 
     spawnCars(dt);
 
-    spawnItems(dt);
-
     updateCars(dt);
 
+
+    /* =====================
+       ITEMS
+    ===================== */
+
+    spawnItems(dt);
+
     updateItems(dt);
+
+
+    /* =====================
+       PLAYER
+    ===================== */
 
     updatePlayer();
 
 
-    /*
-      Collision.
-    */
+    /* =====================
+       COLLISION
+    ===================== */
 
     checkCollisions();
 
 
-    /*
-      Out of fuel.
-    */
+    /* =====================
+       FUEL GAME OVER
+    ===================== */
 
     if(
+      state.running &&
       state.fuel<=0
     ){
 
@@ -4383,10 +3067,6 @@ function animate(timestamp){
   }
 
 
-  /*
-    Always draw.
-  */
-
   draw();
 
 
@@ -4397,7 +3077,7 @@ function animate(timestamp){
 
 
 /* =====================================================
-   FINAL INITIALIZATION
+   INITIALIZATION
 ===================================================== */
 
 buildRoad();
@@ -4408,7 +3088,7 @@ updateHUD();
 
 
 /*
-  Start animation.
+   Start the animation loop.
 */
 
 requestAnimationFrame(
@@ -4417,7 +3097,7 @@ requestAnimationFrame(
 
 
 /* =====================================================
-   END OF ROAD RUSH
+   END ROAD RUSH
 ===================================================== */
 
 </script>
