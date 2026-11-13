@@ -1283,8 +1283,584 @@ mainBtn.addEventListener(
 /* =========================
    END P1
 ========================= *//* =====================================================
-   P2 - PAUSE + SAFE TRAFFIC SYSTEM
+   P2 / 4
+   ROAD + PLAYER + GAME STATE + DYNAMIC TRAFFIC
 ===================================================== */
+
+
+/* =====================================================
+   ROAD
+===================================================== */
+
+const road = {
+
+  x: 35,
+
+  width: 350,
+
+  lanes: 3,
+
+  lanesX: [],
+
+  offset: 0
+
+};
+
+
+function buildRoad(){
+
+  road.lanesX = [];
+
+  const laneWidth =
+    road.width / road.lanes;
+
+
+  for(
+    let i = 0;
+    i < road.lanes;
+    i++
+  ){
+
+    road.lanesX.push(
+      road.x +
+      laneWidth * i +
+      laneWidth / 2
+    );
+  }
+}
+
+
+/* =====================================================
+   PLAYER
+===================================================== */
+
+const player = {
+
+  lane: 1,
+
+  x: 210,
+
+  y: 650,
+
+  width: 46,
+
+  height: 78
+
+};
+
+
+/* =====================================================
+   TRAFFIC TYPES
+===================================================== */
+
+const trafficTypes = [
+
+  {
+    name: "car",
+    w: 46,
+    h: 78,
+    speed: 180
+  },
+
+  {
+    name: "taxi",
+    w: 46,
+    h: 78,
+    speed: 165
+  },
+
+  {
+    name: "truck",
+    w: 52,
+    h: 92,
+    speed: 145
+  },
+
+  {
+    name: "bus",
+    w: 58,
+    h: 110,
+    speed: 125
+  }
+
+];
+
+
+/* =====================================================
+   GAME STATE
+===================================================== */
+
+const state = {
+
+  running: false,
+
+  paused: false,
+
+  score: 0,
+
+  coins: 0,
+
+  lives: 3,
+
+  fuel: 100,
+
+  roadSpeed: 180,
+
+  speedMultiplier: 1,
+
+  slowTimer: 0,
+
+  spawnTimer: 1,
+
+  itemTimer: 1.5,
+
+  lastTime: 0,
+
+  invulnerable: 0,
+
+  flash: 0,
+
+  cars: [],
+
+  items: [],
+
+  nearMissTimer: 0
+
+};
+
+
+/* =====================================================
+   HIGH SCORE
+===================================================== */
+
+let highScore = 0;
+
+try{
+
+  highScore =
+    Number(
+      localStorage.getItem(
+        "roadRushHighScore"
+      )
+    ) || 0;
+
+}catch(error){
+
+  highScore = 0;
+}
+
+
+/* =====================================================
+   HUD
+===================================================== */
+
+function updateHUD(){
+
+  if(
+    !Number.isFinite(
+      state.score
+    )
+  ){
+
+    state.score = 0;
+  }
+
+
+  if(
+    !Number.isFinite(
+      state.coins
+    )
+  ){
+
+    state.coins = 0;
+  }
+
+
+  if(
+    !Number.isFinite(
+      state.fuel
+    )
+  ){
+
+    state.fuel = 100;
+  }
+
+
+  scoreEl.textContent =
+    Math.floor(
+      state.score
+    );
+
+
+  coinsEl.textContent =
+    state.coins;
+
+
+  livesEl.textContent =
+    "❤️ " +
+    state.lives;
+
+
+  const fuelPercent =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        state.fuel
+      )
+    );
+
+
+  fuelEl.textContent =
+    Math.floor(
+      fuelPercent
+    ) + "%";
+
+
+  fuelFill.style.width =
+    fuelPercent + "%";
+
+
+  if(
+    fuelPercent > 50
+  ){
+
+    fuelFill.style.background =
+      "#35d04f";
+
+  }else if(
+    fuelPercent > 25
+  ){
+
+    fuelFill.style.background =
+      "#ffd21f";
+
+  }else{
+
+    fuelFill.style.background =
+      "#ff3333";
+  }
+}
+
+
+/* =====================================================
+   RESET GAME
+===================================================== */
+
+function resetGame(){
+
+  state.running = false;
+
+  state.paused = false;
+
+  state.score = 0;
+
+  state.coins = 0;
+
+  state.lives = 3;
+
+  state.fuel = 100;
+
+  state.roadSpeed = 180;
+
+  state.speedMultiplier = 1;
+
+  state.slowTimer = 0;
+
+  state.spawnTimer = .9;
+
+  state.itemTimer = 1.5;
+
+  state.lastTime = 0;
+
+  state.invulnerable = 0;
+
+  state.flash = 0;
+
+  state.cars = [];
+
+  state.items = [];
+
+  state.nearMissTimer = 0;
+
+
+  player.lane = 1;
+
+  player.x =
+    road.lanesX[1];
+
+  player.y = 650;
+
+
+  road.offset = 0;
+
+
+  /*
+    Start with a random traffic
+    pattern every new game.
+  */
+
+  buildTrafficPattern();
+
+
+  updateHUD();
+}
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+function startGame(){
+
+  initAudio();
+
+  resetGame();
+
+  state.running = true;
+
+  state.lastTime =
+    performance.now();
+
+
+  title.textContent =
+    "ROAD RUSH";
+
+
+  message.innerHTML =
+    "Avoid traffic, collect coins<br>" +
+    "and fuel packs!";
+
+
+  mainBtn.textContent =
+    "Start Game";
+
+
+  overlay.style.display =
+    "none";
+
+
+  updateHUD();
+}
+
+
+/* =====================================================
+   GAME OVER
+===================================================== */
+
+function gameOver(){
+
+  state.running = false;
+
+  state.paused = false;
+
+
+  const finalScore =
+    Math.floor(
+      state.score
+    );
+
+
+  if(
+    finalScore > highScore
+  ){
+
+    highScore =
+      finalScore;
+
+
+    try{
+
+      localStorage.setItem(
+        "roadRushHighScore",
+        highScore
+      );
+
+    }catch(error){}
+  }
+
+
+  title.textContent =
+    "GAME OVER";
+
+
+  message.innerHTML =
+    "Score: " +
+    finalScore +
+    "<br>Coins: " +
+    state.coins +
+    "<br>Best: " +
+    highScore;
+
+
+  mainBtn.textContent =
+    "Play Again";
+
+
+  overlay.style.display =
+    "flex";
+
+
+  updateHUD();
+}
+
+
+/* =====================================================
+   PLAYER MOVEMENT
+===================================================== */
+
+function moveLeft(){
+
+  if(
+    !state.running ||
+    state.paused
+  ){
+
+    return;
+  }
+
+
+  if(
+    player.lane > 0
+  ){
+
+    player.lane--;
+
+    player.x =
+      road.lanesX[
+        player.lane
+      ];
+  }
+}
+
+
+function moveRight(){
+
+  if(
+    !state.running ||
+    state.paused
+  ){
+
+    return;
+  }
+
+
+  if(
+    player.lane <
+    road.lanes - 1
+  ){
+
+    player.lane++;
+
+    player.x =
+      road.lanesX[
+        player.lane
+      ];
+  }
+}
+
+
+/* =====================================================
+   KEYBOARD
+===================================================== */
+
+window.addEventListener(
+  "keydown",
+  function(e){
+
+    if(
+      e.key === "ArrowLeft" ||
+      e.key.toLowerCase() === "a"
+    ){
+
+      e.preventDefault();
+
+      moveLeft();
+    }
+
+
+    if(
+      e.key === "ArrowRight" ||
+      e.key.toLowerCase() === "d"
+    ){
+
+      e.preventDefault();
+
+      moveRight();
+    }
+
+
+    if(
+      e.key === " " ||
+      e.key.toLowerCase() === "p"
+    ){
+
+      e.preventDefault();
+
+      togglePause();
+    }
+
+  }
+);
+
+
+/* =====================================================
+   MOBILE BUTTONS
+===================================================== */
+
+leftBtn.addEventListener(
+  "pointerdown",
+  function(e){
+
+    e.preventDefault();
+
+    initAudio();
+
+    moveLeft();
+
+  },
+  { passive:false }
+);
+
+
+rightBtn.addEventListener(
+  "pointerdown",
+  function(e){
+
+    e.preventDefault();
+
+    initAudio();
+
+    moveRight();
+
+  },
+  { passive:false }
+);
+
+
+/* =====================================================
+   MAIN BUTTON
+===================================================== */
+
+mainBtn.addEventListener(
+  "click",
+  function(){
+
+    if(
+      !state.running
+    ){
+
+      startGame();
+
+    }else if(
+      state.paused
+    ){
+
+      resumeGame();
+    }
+
+  }
+);
 
 
 /* =====================================================
@@ -1293,11 +1869,17 @@ mainBtn.addEventListener(
 
 function togglePause(){
 
-  if(!state.running)
+  if(
+    !state.running
+  ){
+
     return;
+  }
 
 
-  if(state.paused){
+  if(
+    state.paused
+  ){
 
     resumeGame();
 
@@ -1321,25 +1903,25 @@ function pauseGame(){
 
   initAudio();
 
-  state.paused=true;
+  state.paused = true;
 
   pauseSound();
 
 
-  title.textContent=
+  title.textContent =
     "PAUSED";
 
 
-  message.innerHTML=
-    "Use ◀ and ▶ to move<br>"+
+  message.innerHTML =
+    "Use ◀ and ▶ to move<br>" +
     "Tap Resume to continue";
 
 
-  mainBtn.textContent=
+  mainBtn.textContent =
     "Resume";
 
 
-  overlay.style.display=
+  overlay.style.display =
     "flex";
 }
 
@@ -1357,69 +1939,97 @@ function resumeGame(){
 
   initAudio();
 
-  state.paused=false;
+  state.paused = false;
 
-  state.lastTime=
+  state.lastTime =
     performance.now();
 
   resumeSound();
 
-  overlay.style.display=
+
+  overlay.style.display =
     "none";
 }
 
 
 /* =====================================================
-   TRAFFIC LANE SYSTEM
+   DYNAMIC TRAFFIC SYSTEM
+===================================================== */
+
+
+/*
+   Traffic is allowed to use
+   ALL THREE LANES.
+
+   The system does NOT permanently
+   keep traffic on one side.
+
+   Instead, it creates changing
+   traffic patterns.
+*/
+
+
+let trafficPattern = [];
+
+let patternIndex = 0;
+
+let lastTrafficLane = -1;
+
+
+/* =====================================================
+   TRAFFIC PATTERNS
 ===================================================== */
 
 /*
-   IMPORTANT:
-
-   The road has 3 lanes.
-
-   We allow traffic to occupy
-   ONLY 2 lanes at a time.
-
-   Therefore one complete lane
-   is always available to the player.
+   0 = LEFT
+   1 = CENTER
+   2 = RIGHT
 */
 
 
-function getUsedTrafficLanes(){
+function buildTrafficPattern(){
 
-  const used=[];
+  const patterns = [
+
+    [0, 1, 2, 1, 0, 2],
+
+    [2, 1, 0, 1, 2, 0],
+
+    [0, 2, 1, 0, 2, 1],
+
+    [1, 0, 2, 1, 2, 0],
+
+    [2, 0, 1, 2, 1, 0],
+
+    [1, 2, 0, 1, 0, 2]
+
+  ];
 
 
-  for(
-    const car of state.cars
-  ){
-
-    if(
-      !used.includes(
-        car.lane
+  const selected =
+    patterns[
+      Math.floor(
+        Math.random() *
+        patterns.length
       )
-    ){
-
-      used.push(
-        car.lane
-      );
-    }
-  }
+    ];
 
 
-  return used;
+  trafficPattern =
+    selected.slice();
+
+
+  patternIndex = 0;
 }
 
 
-/*
-   Returns true if a lane has
-   a car anywhere in its useful
-   traffic area.
-*/
+/* =====================================================
+   CHECK NEARBY CAR
+===================================================== */
 
-function laneHasTraffic(
-  lane
+function laneHasNearbyCar(
+  lane,
+  spawnY = -100
 ){
 
   for(
@@ -1427,42 +2037,26 @@ function laneHasTraffic(
   ){
 
     if(
-      car.lane!==lane
+      car.lane !== lane
     ){
 
       continue;
     }
 
 
-    /*
-      Ignore cars that are far
-      above the screen.
-    */
+    const distance =
+      Math.abs(
+        car.y -
+        spawnY
+      );
+
 
     if(
-      car.y<
-      -car.height-100
+      distance < 170
     ){
 
-      continue;
+      return true;
     }
-
-
-    /*
-      Ignore cars that already
-      passed the bottom.
-    */
-
-    if(
-      car.y>
-      canvas.height+100
-    ){
-
-      continue;
-    }
-
-
-    return true;
   }
 
 
@@ -1470,13 +2064,11 @@ function laneHasTraffic(
 }
 
 
-/*
-   Check the distance from a
-   new car to existing cars
-   in the same lane.
-*/
+/* =====================================================
+   CHECK LANE AHEAD
+===================================================== */
 
-function laneSafeForSpawn(
+function laneBlockedAhead(
   lane
 ){
 
@@ -1485,7 +2077,7 @@ function laneSafeForSpawn(
   ){
 
     if(
-      car.lane!==lane
+      car.lane !== lane
     ){
 
       continue;
@@ -1493,32 +2085,131 @@ function laneSafeForSpawn(
 
 
     /*
-      New cars start above the
-      screen.
+      This is the important
+      danger area.
 
-      Keep enough distance so
-      vehicles don't appear
-      directly on top of each
-      other.
+      Cars far above or far
+      below the player don't
+      count as blocking the path.
     */
 
     if(
-      car.y<
-      220
+
+      car.y > 80 &&
+
+      car.y <
+      player.y - 70
+
     ){
 
-      const distance=
-        Math.abs(
-          car.y+
-          car.height
-        );
-
-
-      if(distance<150){
-
-        return false;
-      }
+      return true;
     }
+  }
+
+
+  return false;
+}
+
+
+/* =====================================================
+   GET SAFE LANES
+===================================================== */
+
+function getCurrentlySafeLanes(){
+
+  const safe = [];
+
+
+  for(
+    let lane = 0;
+    lane < road.lanes;
+    lane++
+  ){
+
+    if(
+      !laneBlockedAhead(lane)
+    ){
+
+      safe.push(lane);
+    }
+  }
+
+
+  return safe;
+}
+
+
+/* =====================================================
+   CAN SPAWN IN LANE
+===================================================== */
+
+function canSpawnInLane(
+  lane
+){
+
+  /*
+    Never spawn directly behind
+    another car.
+  */
+
+  if(
+    laneHasNearbyCar(
+      lane,
+      -100
+    )
+  ){
+
+    return false;
+  }
+
+
+  /*
+    Count the other lanes that
+    are already blocked ahead.
+  */
+
+  let otherBlocked = 0;
+
+
+  for(
+    let other = 0;
+    other < road.lanes;
+    other++
+  ){
+
+    if(
+      other === lane
+    ){
+
+      continue;
+    }
+
+
+    if(
+      laneBlockedAhead(other)
+    ){
+
+      otherBlocked++;
+    }
+  }
+
+
+  /*
+    If two other lanes are already
+    blocked, this lane MUST remain
+    free.
+
+    Therefore:
+       🚗 | 🚕 | 🚙
+    can never be deliberately
+    created in the danger area.
+  */
+
+  if(
+    otherBlocked >= 2
+  ){
+
+    return false;
   }
 
 
@@ -1526,195 +2217,212 @@ function laneSafeForSpawn(
 }
 
 
-/*
-   Check if adding traffic
-   to a lane would create
-   three blocked lanes.
+/* =====================================================
+   GET NEXT TRAFFIC LANE
+===================================================== */
 
-   It never allows that.
-*/
-
-function canUseLane(
-  lane
-){
-
-  const used=
-    getUsedTrafficLanes();
-
-
-  /*
-    This lane already contains
-    traffic.
-
-    It is okay to continue
-    using the same lane if
-    there is enough distance.
-  */
+function getNextTrafficLane(){
 
   if(
-    used.includes(lane)
+    trafficPattern.length === 0 ||
+    patternIndex >=
+    trafficPattern.length
   ){
 
-    return laneSafeForSpawn(
-      lane
-    );
+    buildTrafficPattern();
   }
 
 
   /*
-    This is a new traffic lane.
-
-    If 2 lanes are already used,
-    we MUST NOT use a third.
+    First try the planned
+    traffic pattern.
   */
-
-  if(
-    used.length>=2
-  ){
-
-    return false;
-  }
-
-
-  return laneSafeForSpawn(
-    lane
-  );
-}
-
-
-/*
-   Get all lanes that can safely
-   receive a new traffic vehicle.
-*/
-
-function getSafeSpawnLanes(){
-
-  const lanes=[];
-
 
   for(
-    let lane=0;
-    lane<road.lanes;
-    lane++
+    let attempt = 0;
+    attempt < 3;
+    attempt++
   ){
 
+    const lane =
+      trafficPattern[
+        patternIndex %
+        trafficPattern.length
+      ];
+
+
+    patternIndex++;
+
+
     if(
-      canUseLane(lane)
+      canSpawnInLane(lane)
     ){
 
-      lanes.push(lane);
+      lastTrafficLane =
+        lane;
+
+      return lane;
     }
   }
 
 
-  return lanes;
+  /*
+    If the planned lane is not
+    available, try the other lanes.
+  */
+
+  const safe =
+    getCurrentlySafeLanes();
+
+
+  /*
+    Prefer a lane different
+    from the previous lane.
+
+    This makes traffic actually
+    move between sides.
+  */
+
+  const different =
+    safe.filter(
+      lane =>
+        lane !==
+        lastTrafficLane
+    );
+
+
+  if(
+    different.length > 0
+  ){
+
+    const lane =
+      different[
+        Math.floor(
+          Math.random() *
+          different.length
+        )
+      ];
+
+
+    lastTrafficLane =
+      lane;
+
+
+    return lane;
+  }
+
+
+  if(
+    safe.length > 0
+  ){
+
+    const lane =
+      safe[
+        Math.floor(
+          Math.random() *
+          safe.length
+        )
+      ];
+
+
+    lastTrafficLane =
+      lane;
+
+
+    return lane;
+  }
+
+
+  /*
+    No safe spawn right now.
+  */
+
+  return -1;
 }
 
 
 /* =====================================================
-   VEHICLE SPACING
+   PREVENT SAME-LANE OVERLAP
 ===================================================== */
-
-function requiredCarGap(
-  front,
-  back
-){
-
-  /*
-    Cars are drawn using top-left
-    y positions.
-
-    So the minimum distance is
-    based on both actual heights.
-  */
-
-  return (
-    front.height+
-    24
-  );
-}
-
-
-/*
-   Keep cars in the same lane
-   separated.
-*/
 
 function preventTrafficOverlap(){
 
   for(
-    let lane=0;
-    lane<road.lanes;
+    let lane = 0;
+    lane < road.lanes;
     lane++
   ){
 
-    const laneCars=
+    const cars =
       state.cars
         .filter(
           car =>
-            car.lane===lane
+            car.lane === lane
         )
         .sort(
-          (a,b)=>
-            a.y-b.y
+          (a,b) =>
+            a.y - b.y
         );
 
 
     /*
-      The first car is the
-      vehicle in front.
-
-      Every next car follows it.
+      Cars with smaller Y are
+      further ahead.
     */
 
     for(
-      let i=1;
-      i<laneCars.length;
+      let i = 1;
+      i < cars.length;
       i++
     ){
 
-      const front=
-        laneCars[i-1];
+      const front =
+        cars[i - 1];
 
-      const back=
-        laneCars[i];
-
-
-      const minGap=
-        requiredCarGap(
-          front,
-          back
-        );
+      const back =
+        cars[i];
 
 
       /*
-        Prevent physical overlap.
+        Calculate a gap using
+        BOTH vehicle sizes.
+
+        This fixes truck/bus/car
+        overlap problems.
       */
 
+      const minimumGap =
+        (
+          front.height +
+          back.height
+        ) / 2 +
+        22;
+
+
       if(
-        back.y<
-        front.y+
-        minGap
+        back.y -
+        front.y <
+        minimumGap
       ){
 
-        back.y=
-          front.y+
-          minGap;
+        back.y =
+          front.y +
+          minimumGap;
       }
 
 
       /*
-        A faster car cannot
-        overtake through the
-        vehicle in front.
+        A faster vehicle cannot
+        drive through a slower
+        vehicle.
       */
 
       if(
-        back.speed>
+        back.speed >
         front.speed
       ){
 
-        back.speed=
+        back.speed =
           front.speed;
       }
     }
@@ -1728,89 +2436,67 @@ function preventTrafficOverlap(){
 
 function createTraffic(){
 
-  /*
-    Get safe lanes.
+  const lane =
+    getNextTrafficLane();
 
-    Because of the 2-lane rule,
-    this will NEVER create a
-    third traffic lane.
+
+  /*
+    No safe lane available.
+    Do NOT create an impossible
+    traffic situation.
   */
 
-  const safeLanes=
-    getSafeSpawnLanes();
-
-
   if(
-    safeLanes.length===0
+    lane === -1
   ){
 
     return false;
   }
 
 
-  /*
-    Pick one of the safe lanes.
-  */
-
-  const lane=
-    safeLanes[
-      Math.floor(
-        Math.random()*
-        safeLanes.length
-      )
-    ];
-
-
-  /*
-    Pick vehicle.
-  */
-
-  const type=
+  const type =
     trafficTypes[
       Math.floor(
-        Math.random()*
+        Math.random() *
         trafficTypes.length
       )
     ];
 
 
-  const car={
+  const car = {
 
-    type:type.name,
+    type: type.name,
 
-    lane:lane,
+    lane: lane,
 
     x:
       road.lanesX[lane],
 
     y:
-      -type.h-50,
+      -type.h - 50,
 
-    width:type.w,
+    width:
+      type.w,
 
-    height:type.h,
+    height:
+      type.h,
 
     speed:
-      type.speed*
+      type.speed *
       (
-        .92+
-        Math.random()*.08
+        .92 +
+        Math.random() * .10
       ),
 
-    nearMiss:false
+    nearMiss: false
 
   };
 
 
-  state.cars.push(car);
+  state.cars.push(
+    car
+  );
 
-
-  /*
-    Final safety check.
-
-    This is an extra protection
-    against accidental bad states.
-  */
 
   preventTrafficOverlap();
 
@@ -1825,50 +2511,62 @@ function createTraffic(){
 
 function spawnCars(dt){
 
-  state.spawnTimer-=dt;
+  state.spawnTimer -= dt;
 
 
   if(
-    state.spawnTimer>0
+    state.spawnTimer > 0
   ){
 
     return;
   }
 
 
-  const difficulty=
+  /*
+    Gradual difficulty.
+  */
+
+  const difficulty =
     Math.min(
-      state.score/2500,
-      .25
+      state.score / 3500,
+      .35
     );
 
 
-  const spawned=
+  const spawned =
     createTraffic();
 
 
-  if(spawned){
+  if(
+    spawned
+  ){
 
     /*
-      Traffic becomes a little
-      more frequent with score.
+      Variable spawn interval.
+
+      This makes traffic appear
+      at different times rather
+      than as a fixed repeating
+      pattern.
     */
 
-    state.spawnTimer=
+    state.spawnTimer =
       Math.max(
-        .70,
-        1.18-difficulty
+        .65,
+        1.20 -
+        difficulty +
+        Math.random() * .35
       );
 
   }else{
 
     /*
-      No safe lane currently.
-
-      Wait briefly and try again.
+      If there is no safe path,
+      wait and try again.
     */
 
-    state.spawnTimer=.30;
+    state.spawnTimer =
+      .25;
   }
 }
 
@@ -1880,20 +2578,20 @@ function spawnCars(dt){
 function updateCars(dt){
 
   for(
-    let i=
-      state.cars.length-1;
+    let i =
+      state.cars.length - 1;
 
-    i>=0;
+    i >= 0;
 
     i--
   ){
 
-    const car=
+    const car =
       state.cars[i];
 
 
     /*
-      Repair invalid values.
+      Repair invalid position.
     */
 
     if(
@@ -1902,27 +2600,31 @@ function updateCars(dt){
       )
     ){
 
-      car.y=
-        -car.height-50;
+      car.y =
+        -car.height - 50;
     }
 
+
+    /*
+      Repair invalid speed.
+    */
 
     if(
       !Number.isFinite(
         car.speed
       ) ||
-      car.speed<=0
+      car.speed <= 0
     ){
 
-      const type=
+      const type =
         trafficTypes.find(
           t =>
-            t.name===
+            t.name ===
             car.type
         );
 
 
-      car.speed=
+      car.speed =
         type
           ? type.speed
           : 150;
@@ -1934,54 +2636,60 @@ function updateCars(dt){
     */
 
     car.y +=
-      car.speed*
-      state.speedMultiplier*
+      car.speed *
+      state.speedMultiplier *
       dt;
 
 
-    /* =====================
+    /* =================================================
        NEAR MISS
-    ===================== */
+    ================================================= */
 
     if(
+
       !car.nearMiss &&
 
-      car.y>
-        player.y-35 &&
+      car.y >
+      player.y - 35 &&
 
-      car.y<
-        player.y+
-        player.height+
-        35
+      car.y <
+      player.y +
+      player.height +
+      35
+
     ){
 
-      const horizontal=
+      const horizontal =
         Math.abs(
-          car.x-
+          car.x -
           player.x
         );
 
 
-      const safeDistance=
+      const safeDistance =
         (
-          car.width+
+          car.width +
           player.width
-        )/2;
+        ) / 2;
 
 
       if(
-        horizontal>
-          safeDistance &&
 
-        horizontal<
-          safeDistance+25
+        horizontal >
+        safeDistance &&
+
+        horizontal <
+        safeDistance + 25
+
       ){
 
-        car.nearMiss=true;
+        car.nearMiss = true;
 
-        state.score+=15;
+        state.score += 15;
 
-        state.nearMissTimer=.7;
+        state.nearMissTimer =
+          .7;
+
 
         beep(
           1000,
@@ -1993,14 +2701,14 @@ function updateCars(dt){
     }
 
 
-    /* =====================
-       REMOVE
-    ===================== */
+    /* =================================================
+       REMOVE OFF SCREEN
+    ================================================= */
 
     if(
-      car.y>
-      canvas.height+
-      car.height+
+      car.y >
+      canvas.height +
+      car.height +
       40
     ){
 
@@ -2009,15 +2717,14 @@ function updateCars(dt){
         1
       );
 
-      state.score+=5;
+
+      state.score += 5;
     }
   }
 
 
   /*
-    IMPORTANT:
-    after movement, separate
-    same-lane traffic again.
+    Final overlap protection.
   */
 
   preventTrafficOverlap();
@@ -2031,26 +2738,26 @@ function updateCars(dt){
 function checkCollisions(){
 
   if(
-    state.invulnerable>0
+    state.invulnerable > 0
   ){
 
     return;
   }
 
 
-  const playerLeft=
-    player.x-
-    player.width/2;
+  const playerLeft =
+    player.x -
+    player.width / 2;
 
-  const playerRight=
-    player.x+
-    player.width/2;
+  const playerRight =
+    player.x +
+    player.width / 2;
 
-  const playerTop=
+  const playerTop =
     player.y;
 
-  const playerBottom=
-    player.y+
+  const playerBottom =
+    player.y +
     player.height;
 
 
@@ -2058,34 +2765,34 @@ function checkCollisions(){
     const car of state.cars
   ){
 
-    const carLeft=
-      car.x-
-      car.width/2;
+    const carLeft =
+      car.x -
+      car.width / 2;
 
-    const carRight=
-      car.x+
-      car.width/2;
+    const carRight =
+      car.x +
+      car.width / 2;
 
-    const carTop=
+    const carTop =
       car.y;
 
-    const carBottom=
-      car.y+
+    const carBottom =
+      car.y +
       car.height;
 
 
     if(
 
-      playerLeft<
+      playerLeft <
       carRight &&
 
-      playerRight>
+      playerRight >
       carLeft &&
 
-      playerTop<
+      playerTop <
       carBottom &&
 
-      playerBottom>
+      playerBottom >
       carTop
 
     ){
@@ -2106,10 +2813,10 @@ function crashPlayer(){
 
   state.lives--;
 
-  state.invulnerable=
+  state.invulnerable =
     1.5;
 
-  state.flash=
+  state.flash =
     .35;
 
 
@@ -2117,34 +2824,33 @@ function crashPlayer(){
 
 
   /*
-    Remove nearby traffic.
-
-    This prevents instant repeated
-    crashes.
+    Remove cars close to
+    the player so the player
+    gets a chance to recover.
   */
 
-  state.cars=
+  state.cars =
     state.cars.filter(
       car =>
         Math.abs(
-          car.y-
+          car.y -
           player.y
-        )>180
+        ) > 180
     );
 
 
   /*
-    Center player.
+    Return player to center.
   */
 
-  player.lane=1;
+  player.lane = 1;
 
-  player.x=
+  player.x =
     road.lanesX[1];
 
 
   if(
-    state.lives<=0
+    state.lives <= 0
   ){
 
     gameOver();
@@ -2157,9 +2863,9 @@ function crashPlayer(){
 }
 
 
-/* =========================
-   END P2
-========================= *//* =====================================================
+/* =====================================================
+   END OF P2
+===================================================== *//* =====================================================
    P3 - ITEMS + DRAWING
 ===================================================== */
 
